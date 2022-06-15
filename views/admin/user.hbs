@@ -1,0 +1,31 @@
+<section class="pt-4">
+    <table class="table" id="usertable">
+        <thead>
+            <tr>
+                <th scope="col">No</th>
+                <th scope="col">UserName</th>
+                <th scope="col">Email</th>
+                <th scope="col">MobileNumber</th>
+                <th scope="col">BLock</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each data}}
+                <tr>
+                    <td scope="row" class="pt-4">{{inc @index}}</td>
+                    <td class="pt-4">{{name}}</td>
+                    <td class="pt-4">{{email}}</td>
+                    <td class="pt-4">{{mobile}}</td>
+                    {{#if status}}
+                    {{!-- href="/admin/block-user/{{this._id}}" --}}
+                    <td><a  class="btn btn-danger" id="{{this._id}}" onclick="blockUser('{{this._id}}','{{this.name}}')">Block</a></td>
+                    {{else}} 
+                    <td><a class="btn btn-danger" onclick="unblockUser('{{this._id}}','{{this.name}}')">UnBlock</a></td>
+                    {{/if}}
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    
+
+</section>

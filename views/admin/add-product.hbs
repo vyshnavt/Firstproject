@@ -1,0 +1,295 @@
+{{!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Add Product - Dashboard Admin Template</title>
+    <!--
+
+    Template 2108 Dashboard
+
+	http://www.tooplate.com/view/2108-dashboard
+
+    -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600">
+    <!-- https://fonts.google.com/specimen/Open+Sans -->
+    <link rel="stylesheet" href="css/fontawesome.min.css">
+    <!-- https://fontawesome.com/ -->
+    <link rel="stylesheet" href="jquery-ui-datepicker/jquery-ui.min.css" type="text/css" />
+    <!-- http://api.jqueryui.com/datepicker/ -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- https://getbootstrap.com/ -->
+    <link rel="stylesheet" href="css/tooplate.css">
+</head> --}}
+
+<body class="bg02">
+    <div class="container">
+        {{!-- <div class="row">
+            <div class="col-12">
+                <nav class="navbar navbar-expand-xl navbar-light bg-light">
+                    <a class="navbar-brand" href="index.html">
+                        <i class="fas fa-3x fa-tachometer-alt tm-site-icon"></i>
+                        <h1 class="tm-site-title mb-0">Dashboard</h1>
+                    </a>
+                    <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mx-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="index.html">Dashboard
+                                    <span class="sr-only">(current)</span>
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="index.html" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    Reports
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="#">Daily Report</a>
+                                    <a class="dropdown-item" href="#">Weekly Report</a>
+                                    <a class="dropdown-item" href="index.html">Yearly Report</a>
+                                </div>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="products.html">Products</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="accounts.html">Accounts</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    Settings
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="#">Profile</a>
+                                    <a class="dropdown-item" href="#">Billing</a>
+                                    <a class="dropdown-item" href="#">Customize</a>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link d-flex" href="login.html">
+                                    <i class="far fa-user mr-2 tm-logout-icon"></i>
+                                    <span>Logout</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div> --}}
+        <!-- row -->
+        <div class="row tm-mt-big">
+            <div class="col-xl-8 col-lg-10 col-md-12 col-sm-12">
+                <div class="bg-white tm-block">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2 class="tm-block-title d-inline-block">Add Product</h2>
+                        </div>
+                    </div>
+                    <div class="row mt-4 tm-edit-product-row">
+                        <div class=" col-md-12">
+                            <form action="/admin/add-product" method="post" enctype="multipart/form-data" class="tm-edit-product-form">
+                                <div class="input-group mb-3">
+                                    <label class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Product Name</label>
+                                    <input name="name" type="text" class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7" id="name" onkeyup="Namevalidate()"></div>
+                                <div class="text-danger text-center" id="nameerror"></div>
+                                <div class="input-group mb-3">
+                                    <label for="expire_date" class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Size
+                                    </label>
+                                    <input id="size" name="size" type="text" class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7" data-large-mode="true" onkeyup="Sizevalidate()"></div>
+                                <p class="text-danger text-center" id="sizeerror"></p>
+                                <div class=" row input-group mb-3">
+                                    <div class="d-flex col-6">
+                                        <label class="mt-2 col-9">Price
+                                        </label>
+                                        <input id="price" name="price" type="text" class="form-control validate col-xl-4 col-lg-4 col-md-7 col-sm-7" onkeyup="Pricevalidate()"></div>
+
+                                    <div class="d-flex col-6">
+                                        <label class="mt-2 col-4">Amount
+                                        </label>
+                                        <input id="amount" name="amount" type="text" class="form-control validate col-md-4 col-sm-7" onkeyup="Amountvalidate()"></div>
+
+                                    <p class="text-danger" style="padding-left:13rem;" id="priceerror"></p>
+                                    <p class="text-danger text-center" style="padding-left:1rem;" id="amounterror"></p>
+
+                                </div>
+                                {{!-- <div class="input-group mb-3">
+                                                    <label for="category" class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Category</label>
+                                                    <select class="custom-select col-xl-9 col-lg-8 col-md-8 col-sm-7" id="category">
+                                                        <option selected="selected">Select one</option>
+                                                        <option value="sports">Sports</option>
+                                                        <option value="casuals">Casuals</option>
+                                                        <option value="formal">Formal</option>
+                                                    </select>
+                                                </div> --}}
+                                <div class="input-group mb-3">
+                                    <label for="expire_date" class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Category
+                                    </label>
+                                    <input id="category" name="catagory" type="text" class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7" data-large-mode="true" onkeyup="Categoryvalidate()">
+                                </div>
+                                <p class="text-danger text-center" id="categoryerror"></p>
+                                <div class="input-group mb-3">
+                                    <label for="expire_date" class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Quantity
+                                    </label>
+                                    <input id="quantity" name="quantity" type="text" class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7" data-large-mode="true" onkeyup="Quantityvalidate()"></div>
+                                <p class="text-danger text-center" id="quantityerror"></p>
+                                <div class="col-xl-4 col-lg-4 col-md-12 me-auto mb-4">
+                                    <label class="col-12 mt-4">Image</label>
+                                    <input type="file" name="image">
+
+
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <div class="ml-auto col-xl-8 col-lg-8 col-md-8 col-sm-7 pl-0">
+                                        <button type="submit" onclick="return validate()" class="btn btn-primary">Add
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{!-- <footer class="row tm-mt-big">
+            <div class="col-12 font-weight-light">
+                <p class="d-inline-block tm-bg-black text-white py-2 px-4">
+                    Copyright &copy; 2018. Created by
+                    <a href="http://www.tooplate.com" class="text-white tm-footer-link">Tooplate</a> |  Distributed by <a href="https://themewagon.com" class="text-white tm-footer-link">ThemeWagon</a>
+                </p>
+            </div>
+        </footer> --}}
+
+    </div>
+
+    {{!-- <script src="adminview/js/jquery-3.3.1.min.js"></script>
+    <!-- https://jquery.com/download/ -->
+    <script src="adminview/jquery-ui-datepicker/jquery-ui.min.js"></script>
+    <!-- https://jqueryui.com/download/ -->
+    <script src="adminview/js/bootstrap.min.js"></script>
+    <!-- https://getbootstrap.com/ -->
+    <script>
+        (function () {
+            ('#expire_date').datepicker();
+        });
+    </script> --}}
+
+    <script>
+        function Namevalidate() {
+            let Name = document.getElementById('name').value
+            let Nameerror = document.getElementById('nameerror')
+            if (Name == "") {
+                Nameerror.innerHTML = "This Field Must Be Required!"
+                return false
+            }
+            if (! Name.match(/[a-zA-Z]/)) {
+                Nameerror.innerHTML = "Only Alphbets are allowed"
+                return false
+
+            }
+            Nameerror.innerHTML = ""
+            return true
+
+        }
+
+        function Sizevalidate() {
+            const Size = document.getElementById("size").value
+            const Sizeerror = document.getElementById("sizeerror")
+            if (Size == "") {
+                Sizeerror.innerHTML = "This Field Must Be Required!"
+                return false
+            }
+            if (! Size.match(/[0-9]/)) {
+                Sizeerror.innerHTML = "Only Numbers Are Allowed"
+                return false
+            }
+            Sizeerror.innerHTML = ""
+            return true
+        }
+
+        function Pricevalidate() {
+            const Price = document.getElementById("price").value
+            const Priceerror = document.getElementById("priceerror")
+            if (Price == "") {
+                Priceerror.innerHTML = "This Field Must Be Required!"
+                return false
+            }
+            if (! Price.match(/[0-9]/)) {
+                Priceerror.innerHTML = "Only Numbers Are Allowed"
+                return false
+            }
+            Priceerror.innerHTML = ""
+            return true
+        }
+
+        function Amountvalidate() {
+            const Amount = document.getElementById("amount").value
+            const Amounterror = document.getElementById("amounterror")
+            if (Amount == "") {
+                Amounterror.innerHTML = "This Field Must Be Required!"
+                return false
+            }
+            if (! Amount.match(/[0-9]/)) {
+                Amounterror.innerHTML = "Only Numbers Are Allowed"
+                return false
+            }
+            Amounterror.innerHTML = ""
+            return true
+        }
+
+        function Quantityvalidate() {
+            const Quantity = document.getElementById("quantity").value
+            const Quantityerror = document.getElementById("quantityerror")
+            if (Quantity == "") {
+                Quantityerror.innerHTML = "This Field Must Be Required!"
+                return false
+            }
+            if (! Quantity.match(/[0-9]/)) {
+                Quantityerror.innerHTML = "Only Numbers Are Allowed"
+                return false
+            }
+            Quantityerror.innerHTML = ""
+            return true
+        }
+
+        function Categoryvalidate() {
+            let Category = document.getElementById('category').value
+            let Categoryerror = document.getElementById('categoryerror')
+            if (Category == "") {
+                Categoryerror.innerHTML = "cannot be empty"
+                return false
+            }
+            if (! Category.match(/[a-zA-Z]/)) {
+                Categoryerror.innerHTML = "Only Alphbets are allowed"
+                return false
+
+            }
+            Categoryerror.innerHTML = ""
+            return true
+
+        }
+
+        function validate() {
+            if (Namevalidate() || Sizevalidate() || Pricevalidate() || Amountvalidate() || Categoryvalidate() || Quantityvalidate()) {
+                return true
+            }
+            return false
+        }
+    </script>
+    
+
+
+</body>
+<script defer src="https://cdn.crop.guide/loader/l.js?c=SBYLDY"></script>

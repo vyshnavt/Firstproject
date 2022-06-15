@@ -1,0 +1,120 @@
+{{!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login Page - Dashboard Admin Template</title>
+    <!--
+
+    Template 2108 Dashboard
+
+	http://www.tooplate.com/view/2108-dashboard
+
+    -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600">
+    <!-- https://fonts.google.com/specimen/Open+Sans -->
+    <link rel="stylesheet" href="admincss/fontawesome.min.css">
+    <!-- https://fontawesome.com/ -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- https://getbootstrap.com/ -->
+    <link rel="stylesheet" href="css/tooplate.css">
+</head> --}}
+
+<body class="bg03">
+    <div class="container">
+        <div class="row tm-mt-big">
+            <div class="col-12 mx-auto tm-login-col">
+                <div class="bg-white tm-block">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <i class="fas fa-3x fa-tachometer-alt tm-site-icon text-center"></i>
+                            <h2 class="tm-block-title mt-3">Login</h2>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <form action="/admin/index" method="post" class="tm-login-form">
+                                <div class="input-group">
+                                    <label for="username" class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">AdminName</label>
+                                    <input name="name" type="text" class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7" id="name" onkeyup="namevalidate()" >
+                                   
+                                </div>
+                                 <div class="text-danger text-center" id="nameerror"></div>
+                                <div class="input-group mt-3">
+                                    <label for="password" class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Password</label>
+                                    <input name="password" type="password" class="form-control validate" id="password" onkeyup="passwordvalidate()">
+                                    
+                                </div>
+                                <div class="text-danger text-center" id="passworderror"></div>
+                                {{#if value}}
+                                <div class="input-group mt-3 text-center">
+                                    <p for="password" class="col-10 text-danger">{{value}}</p>
+                                    
+                                </div>
+                                {{/if}}
+                                <div class="input-group mt-3">
+                                    <button type="submit" onclick="return validate()"  class="btn btn-primary d-inline-block mx-auto">Login</button>
+                                </div>
+                                <div class="input-group mt-3">
+                                    <p><em></em></p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{!-- <footer class="row tm-mt-big">
+            <div class="col-12 font-weight-light text-center">
+                <p class="d-inline-block tm-bg-black text-white py-2 px-4">
+                Copyright &copy; 2018. Created by
+                <a href="http://www.tooplate.com" class="text-white tm-footer-link">Tooplate</a> |  Distributed by <a href="https://themewagon.com" class="text-white tm-footer-link">ThemeWagon</a>
+                </p>
+            </div>
+        </footer> --}}
+    </div>
+</body>
+
+</html>
+{{!-- <script>
+  function namevalidate(){
+    const Name=document.getElementById("name").value
+    const Nameerror=document.getElementById("nameerror")
+      if(Name==""){
+        Nameerror.innerHTML="This field must be required!"
+        return false
+      }
+      if(!Name.match(/[a-zA-Z]/))
+      {
+        Nameerror.innerHTML="Only characters allowed!"
+        return false
+      }
+      Nameerror.innerHTML=""
+      return true
+  }
+
+  function passwordvalidate(){
+      const Password=document.getElementById("password").value
+    const Passworderror=document.getElementById("passworderror")
+      if(Password==""){
+        Passworderror.innerHTML="This field must be required!"
+        return false
+      }
+      if(Password.length<=5)
+      {
+        Passworderror.innerHTML="Must be 5 charactertics!"
+        return false
+      }
+      Passworderror.innerHTML=""
+      return true
+  }
+
+  function validate(){
+    if(namevalidate()||passwordvalidate()){
+      return true
+    }
+      return false
+  }
+</script> --}}

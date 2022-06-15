@@ -1,0 +1,56 @@
+<section>
+    <body class="bg03">
+    <div class="container">
+        <div class="row tm-mt-big">
+            <div class="col-12 mx-auto tm-login-col">
+                <div class="bg-white tm-block">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <h2 class="tm-block-title mt-3">Edit Category </h2>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <form action="/admin/edit-category/{{data._id}}" method="post" class="tm-login-form">
+                                <div class="input-group">
+                                    <label  class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Category Name</label>
+                                    <input name="name" type="text" value="{{data.name}}" class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7" id="name" onkeyup="namevalidate()">
+                                </div>
+                                <div class="text-danger text-center" id="nameerror"></div>
+                                <div class="input-group mt-3">
+                                    <button type="submit" onclick="return validate()" class="btn btn-primary d-inline-block mx-auto">Add</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+</section>
+<script>
+  function namevalidate(){
+    const Name=document.getElementById("name").value
+    const Nameerror=document.getElementById("nameerror")
+      if(Name==""){
+        Nameerror.innerHTML="This field must be required!"
+        return false
+      }
+      if(!Name.match(/[a-zA-Z]/))
+      {
+        Nameerror.innerHTML="Only characters allowed!"
+        return false
+      }
+      Nameerror.innerHTML=""
+      return true
+  }
+
+
+  function validate(){
+    if(namevalidate()){
+      return true
+    }
+      return false
+  }
+</script>
