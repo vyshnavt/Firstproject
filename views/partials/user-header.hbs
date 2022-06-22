@@ -15,7 +15,7 @@
 					<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
 						<ul class="nav navbar-nav menu_nav ml-auto">
 							<li class="nav-item {{#if value}} active {{/if}}"><a class="nav-link" href="/">Home</a></li>
-                            <li class="nav-item {{#if shop}} active {{/if}}"><a class="nav-link" href="/shop">Shop</a></li>
+                            <li class="nav-item {{#if shop}} active {{/if}}"><a class="nav-link" href="/shopcategory">Shop</a></li>
 							{{!-- <li class="nav-item submenu dropdown">
 								<a href="#" class="nav-link dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true"
 								 aria-expanded="false">Shop</a>
@@ -48,11 +48,27 @@
 							<li class="nav-item {{#if contact}} active {{/if}}"><a class="nav-link" href="/contact">Contact</a></li>
 							<li class="nav-item {{#if wishlist}} active {{/if}}"><a class="nav-link" href="/Wishlist">Wishlist</a></li>
 							<li class="nav-item {{#if cart}} active {{/if}}"><a class="nav-link" href="/cart">Cart<span class="badge badge-warning ml-1" id="cart-count">{{cartcount}}</span></a></li>
-							{{#if user}}
-							<li class="nav-item {{#if login}} active {{/if}}"><a class="nav-link" onclick="userLogout()">LogOut</a></li>
+							<li></li>
+							<li class="nav-item {{#if wishlist}} active {{/if}}">
+							<div class="btn-group" >
+	 							<a type="button"  class="nav-link  dropdown-toggle {{#if login}} active {{/if}} " style="width:50px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    							Account
+ 								 </a>
+  								<div class="dropdown-menu  dropdown-menu-right" style="min-width: 5rem; line-height: normal; padding: 0rem;" >
+									{{#if user}}
+									<button class="dropdown-item "  type="button" ><li class="nav-item "><a class="nav-link" href="/user-profile">Profile</a></li></button>
+    							<button class="dropdown-item"  type="button" ><li class="nav-item "><a class="nav-link" onclick="userLogout()">LogOut</a></li></button>
+   								
+							
 							{{else}}
-							<li class="nav-item {{#if login}} active {{/if}}"><a class="nav-link" href="/login">Login</a></li>
+							<button class="dropdown-item"  type="button" ><li class="nav-item {{#if login}} active {{/if}}"><a class="nav-link" href="/login">Login</a></li></button>
+							
 							{{/if}}
+    							
+  								</div>
+								</div>
+								</li>
+							
 						</ul>
 						{{!-- <ul class="nav navbar-nav navbar-right">
 							<li class="nav-item"><a href="/cart" class="cart {{#if cart}} active {{/if}}"><span class="ti-bag"></span></a></li>

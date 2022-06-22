@@ -170,7 +170,7 @@
                                 </td>
                                  <td>
                                    
-                                    <div > <a href="/product-delete/{{this._id}}/{{this.product._id}}" class="btn btn-danger">Remove</a></div>
+                                    <div > <a  onclick="removeFromcart('{{this._id}}','{{this.product._id}}')" class="btn btn-danger text-white">Remove</a></div>
                                 </td>
                             </tr>
                             
@@ -291,7 +291,7 @@
                         <div class="col-7">
                         </div>
                         <div class="col-3 checkout_btn_inner d-flex align-items-end">
-                             <a class="primary-btn px-5" href="/checkout">Proceed to checkout</a>
+                             <a class="primary-btn px-5" style="border-radius: 3px;" href="/checkout">Proceed to checkout</a>
                         </div>
 
                     </div>

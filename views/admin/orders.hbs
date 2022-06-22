@@ -1,0 +1,40 @@
+<section class="pt-4">
+    <table class="table" id="usertable">
+        <thead>
+            <tr>
+                <th scope="col">No</th>
+                <th scope="col">Products</th>
+                <th scope="col">UserName</th>
+                <th scope="col">Mobile</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Date</th>
+                <th scope="col">Payment</th>
+                <th scope="col">Status</th>
+                <th scope="col">Option</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each data}}
+                <tr>
+                    <td scope="row" class="pt-4">{{inc @index}}</td>
+                    
+                    <td class="pt-4">{{#each product}}<div>{{name}}</div><hr>{{/each}}</td>
+                    {{#each prod}}
+                    <td class="pt-4">{{name}}</td>
+                    {{/each}}
+                    <td class="pt-4">{{deliveryDetails.mobile}}</td>
+                    <td class="pt-4">{{total}}</td>
+                    <td class="pt-4">{{date}}</td>
+                    <td class="pt-4">{{paymentMethod}}</td>
+                    <td class="pt-4">{{status}}</td>
+                    {{#if status}}
+                    <td class="" id="{{this._id}}"><a  class="btn btn-danger"  onclick="cancelOrder('{{this._id}}')">Cancel</a></td>
+                    {{/if}}
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    
+    
+
+</section>

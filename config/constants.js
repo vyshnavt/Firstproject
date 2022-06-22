@@ -4,5 +4,6 @@ module.exports={
     CATEGORYDATA:'category',
     CARTDATA:'cart',
     ADMIN:'admin',
-    ORDER:'order'
+    ORDER:'order',
+    WISHLIST:'wishlist'
 }

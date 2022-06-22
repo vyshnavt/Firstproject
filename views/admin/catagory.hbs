@@ -10,15 +10,20 @@
                   <a  onclick="addCategory()" class="btn btn-primary">Add New Category</a>
                 </div>
             </div>
+             {{#if already}}
+                   <div class="text-danger text-center">{{already}}</div>
+             {{/if}}
             <hr>
+            
             <div class=" d-flex justify-content-center">
                 <table id="usertable" class="table table-hover table-striped mt-3" >
                     <thead>
                         <tr>
                             <th><div class="ml-5">No</div></th>
                           <th><div class="ml-5">Name</div></th>
+                          <th><div class="ml-5">Status</div></th>
                           <th><div class="ml-5">Edit</div></th>
-                          <th><div class="ml-4">Delete</div></th>
+                          <th><div class="ml-4">Options</div></th>
                         </tr>
                     </thead>
 
@@ -27,48 +32,87 @@
                             <tr>
                                 <td><div class="ml-5 pt-2">{{inc @index}}</div></td>
                                 <td><div class="ml-5 pt-2">{{ this.name }}</div></td>
+                                <td><div class="ml-5 pt-2">{{this.status}}</div></td>
                                 <td>
-                                   <a href="/admin/edit-category/{{this._id}}" class="btn btn-info ml-5">Edit</a>
-                                   {{!-- <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Edit</button> --}}      
+                                   {{!-- <a href="/admin/edit-category/{{this._id}}" class="btn btn-info ml-5">Edit</a> --}}
+                                 
+                                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{this.name}}" data-whatever="@mdo">Edit</button>   
                                 </td>                        
                                 <td class="tm-trash-icon-cell ">
-                                    <div class="ml-5 pt-2"><a  onclick="deleteCategory('{{this._id}}','{{this.name}}')"><i class="fas fa-trash-alt tm-trash-icon"></i></a>  </div>
-                                                                
+                                    {{#if this.status}}
+                                    <button class="btn btn-primary" ><a  onclick="blockCategory('{{this._id}}','{{this.name}}')">Block</button>
+                                    {{else}}
+                                    <button class="btn btn-primary" ><a  onclick="unblockCategory('{{this._id}}','{{this.name}}')">UnBlock</button> 
+                                    {{/if}}                                
                                 </td>
                             </tr>
                         {{/each}}
                     </tbody>
                 </table>
             </div>
-
         </div>
     </div>
- 
 
-</section>
 
-{{!-- 
- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>
-   <div class="modal-dialog" role="document">
+    {{#each category}}
+<div class="modal fade" id="{{this.name}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Edit Category</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Edit category</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      
       <div class="modal-body">
-        <form action="">
-          <div class="form-group">
-            <label for="recipient-name" class="col-form-label">Category Name</label>
-            <input type="text" class="form-control" value='{{this._id}}' id="recipient-name">
-          </div>
-          <a href="/admin/edit-category/{{this._id}}"><button type="button" class="btn btn-primary">Update</button></a>
-          
-        </form>
+         <form action="/admin/edit-category/{{this._id}}" method="post" enctype="multipart/form-data" class="tm-edit-product-form">
+                                <div class="input-group mb-3">
+                                    <label class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Category Name</label>
+                                    <input name="name" id="" type="text" value="{{this.name}}" class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7" onkeyup="Namevalidate()"></div>
+                                   
+                                <p class="text-danger text-center" id="namecaterror"></p>
+                                <div class="input-group mb-3">
+                                    <div class="ml-auto col-xl-8 col-lg-8 col-md-8 col-sm-7 pl-0">
+                                        <button type="submit" onclick="return validate()" class="btn btn-primary">Update
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
       </div>
       <div class="modal-footer">  
       </div>
     </div>
   </div>
-</div> --}}
+</div>
+{{/each}}
+</section>
+
+<script>
+  function Namevalidate(){
+    console.log("DDDDDDddd")
+    const cname=document.getElementById("namecat").value
+    const cnameerror=document.getElementById("namecaterror")
+      if(cname==""){
+        console.log("nnnnnn")
+        cnameerror.innerHTML="This field must be required!"
+        return false
+      }
+      if(!cname.match(/[a-zA-Z]/))
+      {
+        cnameerror.innerHTML="Only characters allowed!"
+        return false
+      }
+      cnameerror.innerHTML=""
+      return true
+  }
+  function validate(){
+    if(Namevalidate()){
+      return true
+    }
+      return false
+  }
+  </script>
+
+
+ 

@@ -13,6 +13,7 @@ module.exports={
             if(user){
                 if(user.password==adminadata.password){
                     adminresponce.status=true
+                    adminresponce.admin=user
                     resolve(adminresponce)
                 }else{
                     adminresponce.status=false
@@ -47,12 +48,22 @@ module.exports={
         })
     },
 
+    
+    deleteuser:(userid)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(constants.USERDATA).deleteOne({_id:objectid(userid)}).then(()=>{
+                resolve()
+            })
+        })
+    },
+
     addProduct:(Productdata)=>{
          return new Promise((resolve,reject)=>{
             Productdata.price=parseInt(Productdata.price)
             Productdata.amount=parseInt(Productdata.amount)
             Productdata.quantity=parseInt(Productdata.quantity)
              db.get().collection(constants.PRODUCTDATA).insertOne(Productdata).then((data)=>{
+                db.get().collection(constants.PRODUCTDATA).updateOne({_id:data.insertedId},{$set:{status:true}})
                 resolve(data.insertedId)
              })
          })
@@ -60,10 +71,18 @@ module.exports={
 
     getproducts:()=>{
         return new Promise(async(resolve,reject)=>{
+          let produtcs=await db.get().collection(constants.PRODUCTDATA).find({status:true}).toArray()
+               resolve(produtcs)       
+        })
+    },
+
+    getproductsAdmin:()=>{
+        return new Promise(async(resolve,reject)=>{
           let produtcs=await db.get().collection(constants.PRODUCTDATA).find().toArray()
                resolve(produtcs)       
         })
     },
+
     getproduct:(productid)=>{
         return new Promise((resolve,reject)=>{
             db.get().collection(constants.PRODUCTDATA).findOne({_id:objectid(productid)}).then((data)=>{
@@ -83,6 +102,9 @@ module.exports={
 
     updateproduct:(productid,productdetail)=>{
         return new Promise((resolve,reject)=>{
+            productdetail.price=parseInt(productdetail.price)
+            productdetail.amount=parseInt(productdetail.amount)
+            productdetail.quantity=parseInt(productdetail.quantity)
             db.get().collection(constants.PRODUCTDATA).updateOne({_id:objectid(productid)},{
                 $set:{name:productdetail.name,
                     size:productdetail.size,
@@ -121,10 +143,29 @@ module.exports={
         })
     },
 
-    deleteCategory:(categoryid)=>{
+    getCategoryuser:()=>{
+        return new Promise(async(resolve,reject)=>{
+           let catagory=await db.get().collection(constants.CATEGORYDATA).find({status:"true"}).toArray()          
+                resolve(catagory)          
+        })
+    },
+
+    blockCategory:(categoryid,categoryname)=>{
         return new Promise((resolve,reject)=>{
-            db.get().collection(constants.CATEGORYDATA).remove({_id:objectid(categoryid)}).then(()=>{
-                resolve()
+            db.get().collection(constants.CATEGORYDATA).update({_id:objectid(categoryid)},{$set:{status:false}}).then(()=>{
+                db.get().collection(constants.PRODUCTDATA).update({catagory:categoryname},{$set:{status:false}}).then(()=>{
+                    resolve()
+                })               
+            })
+        })
+    },
+
+    unblockCategory:(categoryid,categoryname)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(constants.CATEGORYDATA).update({_id:objectid(categoryid)},{$set:{status:"true"}}).then(()=>{
+                db.get().collection(constants.PRODUCTDATA).update({catagory:categoryname},{$set:{status:true}}).then(()=>{
+                    resolve()
+                })               
             })
         })
     },
@@ -152,13 +193,140 @@ module.exports={
     },
 
     updateCategory:(category,categoryid)=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(constants.CATEGORYDATA).updateOne({_id:objectid(categoryid)},{
-                $set:{name:category.name}}).then(()=>{
-                    resolve()
-                })
+        return new Promise(async(resolve,reject)=>{
+            let catego=await db.get().collection(constants.CATEGORYDATA).findOne({name:category.name})
+            if(catego){
+                resolve(0)
+            }else{
+                db.get().collection(constants.CATEGORYDATA).updateOne({_id:objectid(categoryid)},{
+                    $set:{name:category.name}}).then((data)=>{
+                        resolve(data)
+                    })
+            }    
         })
-    }
+    },
+
+    addAdimn:(admindata)=>{
+        return new Promise(async(resolve,reject)=>{
+            let admin=await db.get().collection(constants.ADMIN).findOne({name:admindata.name})
+            if(!admin){
+                db.get().collection(constants.ADMIN).insertOne(admindata)
+                resolve({status:true})
+            }else{
+                resolve({status:false})
+            }
+            
+        })
+        
+    },
+
+    editAdimn:(admindata,adminId)=>{
+        return new Promise(async(resolve,reject)=>{
+            let admin=await db.get().collection(constants.ADMIN).findOne({name:admindata.name})
+            if(!admin){
+                db.get().collection(constants.ADMIN).updateOne({_id:objectid(adminId)},{$set:{name:admindata.name}}).then(()=>{
+                    resolve({status:true})
+                })
+            }else{
+                resolve({status:false})
+            }
+            
+        })
+        
+    },
+
+    getAdmin:()=>{
+        return new Promise(async(resolve,reject)=>{
+          let admindata=await db.get().collection(constants.ADMIN).find({admin:'admin'}).toArray()
+          resolve(admindata)
+        })
+    },
+    
+    deleteAdmin:(adminId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(constants.ADMIN).deleteOne({_id:objectid(adminId)}).then(()=>{
+                resolve()
+            })
+        })
+    },
+
+    blockAdmin:(adminId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(constants.ADMIN).updateOne({_id:objectid(adminId)},{$set:{status:false}}).then((data)=>{
+                resolve(data)
+            })
+        })
+    },
+
+    unblockAdmin:(adminId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(constants.ADMIN).updateOne({_id:objectid(adminId)},{$set:{status:true}}).then((data)=>{
+                resolve(data)
+            })
+        })
+    },
+
+    getOrds:()=>{
+        return new Promise(async(resolve,reject)=>{
+        let data=await db.get().collection(constants.ORDER).find().toArray()
+        resolve(data)
+        })
+    },
+
+    getOrders:()=>{
+        return new Promise(async(resolve,reject)=>{
+            
+            let orderDetail= await db.get().collection(constants.ORDER).aggregate([
+                //  {
+                //      $project:{
+                //         user:'$user',
+                //          item:'$products.item',
+                //          quanti:'$products.quantity',
+                //          status:'$status',
+                //          date:'$date',
+                //          deliveryDetails:'$deliveryDetails',
+                //          address:'$deliveryDetails.address',
+                //          mobile:'$mobile',
+                //          payment:'$paymentMethod',
+                //          total:'$total'
+                //      }
+                //  },
+                 {
+                     $lookup:{
+                         from:constants.PRODUCTDATA,
+                         localField:'products.item',
+                         foreignField:'_id',
+                         as:'product'
+                     }
+                 },
+                 {
+                    $lookup:{
+                        from:constants.USERDATA,
+                        localField:'user',
+                        foreignField:'_id',
+                        as:'prod'
+                    }
+                 }
+                 
+                //  {
+                //      $project:{
+                //          item:1,quanti:1,status:1,prod:1,deliveryDetails:1,total:1,payment:1,address:1,mobile:1,date:1,product:1
+                //      }
+                //  },
+                
+             ]).toArray()
+             resolve(orderDetail)
+            
+        })
+    },
+
+    cancelOrder:(orderId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(constants.ORDER).updateOne({_id:objectid(orderId)},{$set:{status:'cancelled'}}).then(()=>{
+                resolve()
+            })
+        })
+    },
 
    
 }

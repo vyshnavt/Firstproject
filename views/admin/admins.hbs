@@ -1,0 +1,201 @@
+<section class="pt-4 ">
+    <div class=" text-right mb-3">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Add New Admin</button>
+        {{#if already}}
+          <div class="text-danger " >{{already}}</div>
+        {{/if}}
+    </div>
+    <table class="table" id="usertable">
+        <thead>
+            <tr>
+                <th scope="col">No</th>
+                <th scope="col">Admin Name</th>
+                <th scope="col">Options</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Delete</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {{#each admindata}}
+                <tr>
+                    <td scope="row" class="pt-4">{{inc @index}}</td>
+                    <td class="pt-4">{{name}}</td>
+                    {{#if status}}
+                    <td><a  class="btn"  id="{{this._id}}" onclick="blockAdmin('{{this._id}}','{{this.name}}')">Block</a></td>
+                    {{else}} 
+                    <td><a class="btn btn-danger" onclick="unblockAdmin('{{this._id}}','{{this.name}}')">UnBlock</a></td>
+                    {{/if}}
+                    
+                    
+                    <td class="pt-4"><a type="button"  data-toggle="modal" data-target="#{{this.name}}" data-whatever="@mdo"><i  class=" far fa-edit tm-trash-icon"></i></a></td>
+                     <td class="pt-4"><a  onclick="deleteAdmin('{{this._id}}','{{this.name}}')"><i class="fas fa-trash-alt tm-trash-icon "></i></a></td>
+                    
+                     
+                </tr>
+ {{/each}}
+ 
+        </tbody>
+    </table>
+    {{#each admindata}}
+
+    <div class="modal " id="{{this.name}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Admin</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/admin/edit-admin/{{this._id}}" method="post"  class="tm-edit-product-form">
+                                <div class="input-group mb-3">
+                                    <label class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Admin Name</label>
+                                    <input name="name" type="text" value="{{this.name}}" class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7" id="namee" onkeyup="Namevalidate()">
+                                </div>
+                                <p class="text-danger text-center" id="nameeerror"></p>
+                                
+                                   
+                                <div class="input-group mb-3">
+                                    <div class="ml-auto col-xl-8 col-lg-8 col-md-8 col-sm-7 pl-0">
+                                        <button type="submit" onclick="return editvalidate()" class="btn btn-primary">Add
+                                        </button>
+                                    </div>
+                                </div>
+                    </form>
+                </div>
+            <div class="modal-footer">  
+        </div>
+    </div>
+     </div>
+     </div>
+            {{/each}}
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add New Admin</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/admin/add-admin" method="post"  class="tm-edit-product-form">
+                                <div class="input-group mb-3">
+                                    <label class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Admin Name</label>
+                                    <input name="name" type="text" class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7" id="naame" onkeyup="namevalidate()">
+                                </div>
+                                <p class="text-danger text-center" id="naameerror"></p>
+                                <div class="input-group mb-3">
+                                    <label class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Password
+                                    </label>
+                                    <input id="password" name="password" type="password" class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7" data-large-mode="true" onkeyup="passwordvalidate()">
+                                </div>
+                                <p class="text-danger text-center" id="passworderror"></p>
+                                
+                                <div class="input-group mb-3">
+                                        <label class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Re-Enter Password</label>
+                                         <input id="reepassword"  type="password" class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7" data-large-mode="true" onkeyup="repasswordvalidate()">
+                                         <input id="" name="admin" type="text" value="admin" class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7" data-large-mode="true"  hidden>
+                                          <input id="" name="status" type="text" value="true" class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7" data-large-mode="true"  hidden>
+                                </div>
+                                    <p class="text-danger text-center" id="reepassworderror"></p>
+                                <div class="input-group mb-3">
+                                    <div class="ml-auto col-xl-8 col-lg-8 col-md-8 col-sm-7 pl-0">
+                                        <button type="submit" onclick="return validate()" class="btn btn-primary">Add
+                                        </button>
+                                    </div>
+                                </div>
+                    </form>
+                </div>
+            <div class="modal-footer">  
+        </div>
+    </div>
+</section>
+
+<script>
+  function namevalidate(){
+    const Name=document.getElementById("naame").value
+    const Nameerror=document.getElementById("naameerror")
+      if(Name==""){
+        Nameerror.innerHTML="This field must be required!"
+        return false
+      }
+      if(!Name.match(/[a-zA-Z]/))
+      {
+        Nameerror.innerHTML="Only characters allowed!"
+        return false
+      }
+      Nameerror.innerHTML=""
+      return true
+  }
+
+  function passwordvalidate(){
+      let Password=document.getElementById("password").value
+    let Passworderror=document.getElementById("passworderror")
+      if(Password==""){
+        Passworderror.innerHTML="This field must be required!"
+        return false
+      }
+      if(Password.length<=5)
+      {
+        Passworderror.innerHTML="Must be 5 charactertics!"
+        return false
+      }
+      Passworderror.innerHTML=""
+      return true
+  }
+
+  function repasswordvalidate(){
+    const password=document.getElementById("password").value
+      const rePassword=document.getElementById("reepassword").value
+    const rePassworderror=document.getElementById("reepassworderror")
+      if(rePassword!=password){
+        rePassworderror.innerHTML="Password must be same"
+        return false
+      }
+      if(rePassword=="")
+      {
+        rePassworderror.innerHTML="This feild required!"
+        return false
+      }
+      rePassworderror.innerHTML=""
+      return true
+  }
+
+  function validate(){
+    if(namevalidate()&&passwordvalidate()&&repasswordvalidate()){
+      return true
+    }
+      return false
+  }
+</script>
+
+
+
+<script>
+
+  function Namevalidate(){
+    const Name=document.getElementById("namee").value
+    const Nameerror=document.getElementById("nameeerror")
+      if(Name==""){
+        Nameerror.innerHTML="This field must be required!"
+        return false
+      }
+      if(!Name.match(/[a-zA-Z]/))
+      {
+        Nameerror.innerHTML="Only characters allowed!"
+        return false
+      }
+      Nameerror.innerHTML=""
+      return true
+  }
+  function editvalidate(){
+    if(Namevalidate()){
+      return true
+    }
+      return false
+  }
+  </script>
+  

@@ -78,7 +78,7 @@
 </body>
 
 </html>
-{{!-- <script>
+<script>
   function namevalidate(){
     const Name=document.getElementById("name").value
     const Nameerror=document.getElementById("nameerror")
@@ -112,9 +112,9 @@
   }
 
   function validate(){
-    if(namevalidate()||passwordvalidate()){
+    if(namevalidate()&&passwordvalidate()){
       return true
     }
       return false
   }
-</script> --}}
+</script>

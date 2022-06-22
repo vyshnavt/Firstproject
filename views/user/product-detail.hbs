@@ -123,18 +123,18 @@
 	<div class="product_image_area mt-2 mb-5 pb-5">
 		<div class="container">
 			<div class="row s_product_inner">
-				<div class="col-lg-6">
+				<div class="col-lg-7">
 					<div class="s_Product_carousel">
-						<div id="img-container">
-				            <div id="lens"></div>
-				            <img id=featured src="/proimg/{{product._id}}.jpg">
+						<div id="img-container"  class="d-flex">
+				            <img id=featured width="350px" src="/proimg/{{product._id}}.jpg">
+							<div id="lens"></div>
 			            </div>
 						{{!-- <div class="single-prd-item">
 							<img class="img-fluid" style="width:30rem;" src="/proimg/{{product._id}}.jpg" alt="">
 						</div> --}}
 					</div>
 				</div>
-				<div class="col-lg-5 offset-lg-1">
+				<div class="col-lg-4 offset-lg-1">
 					<div class="s_product_text">
 						<h3>{{product.name}}</h3>
 						<h2>₹{{product.price}}</h2>
@@ -145,18 +145,18 @@
 						{{!-- <p>Mill Oil is an innovative oil filled radiator with the most modern technology. If you are looking for
 							something that can make your interior look awesome, and at the same time give you the pleasant warm feeling
 							during the winter.</p> --}}
-						<div class="product_count">
+						{{!-- <div class="product_count">
 							<label for="qty">Quantity:</label>
 							<input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:" class="input-text qty">
 							<button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
 							 class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
 							<button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
 							 class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
-						</div>
+						</div> --}}
 						<div class="card_area d-flex align-items-center">
-							<a class="primary-btn" href="#">Add to Cart</a>
-							<a class="icon_btn" href="#"><i class="lnr lnr lnr-diamond"></i></a>
-							<a class="icon_btn" href="#"><i class="lnr lnr lnr-heart"></i></a>
+							<a class="primary-btn" onclick="addToCart('{{product._id}}')">Add to Cart</a>
+							{{!-- <a class="icon_btn" href="#"><i class="lnr lnr lnr-diamond"></i></a> --}}
+							<a class="icon_btn" onclick="addTowishlist('{{product._id}}')"><i class="lnr lnr lnr-heart"></i></a>
 						</div>
 					</div>
 				</div>

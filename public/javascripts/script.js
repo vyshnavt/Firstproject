@@ -1,5 +1,4 @@
 
-
 function addToCart(proId) {
 
     $.ajax({
@@ -11,6 +10,17 @@ function addToCart(proId) {
                 count = parseInt(count) + 1
                 $("#cart-count").html(count)
             }
+
+        }
+    })
+}
+
+function addTowishlist(proId) {
+    $.ajax({
+        url: '/add-wishlist/'+proId,
+        method: 'get',
+        success: (response) => {
+          
 
         }
     })
@@ -60,6 +70,7 @@ function blockUser(usrId, userName) {
                     if (response.status) {
                         swal(userName + " has been Blocked").then((value) => {
                             location.reload()
+                           // document.getElementById(usrId).innerHTML="Unblock"
                         });
                     }
 
@@ -97,8 +108,106 @@ function unblockUser(usrId, userName) {
 
 }
 
-function logout() {
+function deleteAdmin(adminId,adminName){
+    swal({
+        title: "Are you sure?",
+        text: "You want to Delete " + adminName,
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+    }).then((value) => {
+        if (value) {
+            $.ajax({
+                url: '/admin/delete-admin/'+adminId,
+                method: 'get',
+                success: (response) => {
+                    if (response.status) {
+                        swal(adminName + " has been Deleted").then((value) => {
+                            location.reload()
+                        });
+                    }
 
+                }
+            })
+        }
+    });
+}
+
+function blockAdmin(adminId,adminName){
+    console.log("lllllllllllllllllll");
+    swal({
+        title: "Are you sure?",
+        text: "You want to block "+adminName,
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((value) => {
+        if (value) {
+            $.ajax({
+                url:'/admin/block-admin/'+adminId,
+                method:'post',
+                success:(responce)=>{
+                    swal(adminName+" has been blocked!").then((val)=>{
+                        location.reload()
+                    })
+                }
+            })
+        } 
+      });
+}
+
+function unblockAdmin(adminId,adminName){
+    swal({
+        title: "Are you sure?",
+        text: "You want to unblock "+adminName,
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((value) => {
+        if (value) {
+            $.ajax({
+                url:'/admin/unblock-admin/'+adminId,
+                method:'get',
+                success:(responce)=>{
+                    swal(adminName+" has been unblocked!").then((val)=>{
+                        location.reload()
+                    })
+                }
+            })
+        } 
+      });
+}
+
+
+function deleteUser(UserName,UserId){
+    swal({
+        title: "Are you sure?",
+        text: "You want to Delete " + UserName,
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+    }).then((value) => {
+        if (value) {
+            $.ajax({
+                url: '/admin/delete-user/'+UserId,
+                method: 'get',
+                success: (response) => {
+                    if (response.status) {
+                        swal(UserName + " has been Deleted").then((value) => {
+                            location.reload()
+                        });
+                    }
+
+                }
+            })
+        }
+    });
+
+}
+
+function logout() {
     swal({
         title: "Are you sure?",
         text: "You want LogOut",
@@ -128,7 +237,8 @@ function addCategory() {
             $.ajax({
                 url: '/admin/add-category',
                 data: {
-                    name: value
+                    name: value,
+                    status:true
                 },
                 method: 'post',
                 success: (responce) => {
@@ -148,7 +258,7 @@ function addCategory() {
     });
 }
 
-function deleteCategory(catId,catName){
+function blockCategory(catId,catName){
     swal({
         title: "Are you sure?",
         text: "You want to block " + catName,
@@ -158,11 +268,37 @@ function deleteCategory(catId,catName){
     }).then((value) => {
         if (value) {
             $.ajax({
-                url: '/admin/delete-category/'+ catId,
+                url: '/admin/block-category/'+ catId+"/"+catName,
                 method: 'get',
                 success: (response) => {
                     if (response.status) {
-                        swal(catName + " has been Deleted").then((value) => {
+                        swal(catName + " has been Blocked").then((value) => {
+                            location.reload()
+                        });
+                    }
+
+                }
+            })
+        }
+    });
+
+}
+
+function unblockCategory(catId,catName){
+    swal({
+        title: "Are you sure?",
+        text: "You want to unblock " + catName,
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+    }).then((value) => {
+        if (value) {
+            $.ajax({
+                url: '/admin/unblock-category/'+ catId+"/"+catName,
+                method: 'get',
+                success: (response) => {
+                    if (response.status) {
+                        swal(catName + " has been unblocked").then((value) => {
                             location.reload()
                         });
                     }
@@ -223,14 +359,177 @@ function userLogout() {
 
 $("#checkOut-form").submit((e)=>{
     e.preventDefault()
-    console.log("ddddddddddddddddddddddddddd");
     $.ajax({
-        url:'/place-order',
+        url:'/place-order-btn',
         method:'post',
         data:$('#checkOut-form').serialize(),
         success:(response)=>{
-            location.href="/conformation/"+response.id
-            
+            if(response.success){
+                location.href="/conformation/"+response.id
+            }else{
+                razorpayPayment(response)
+            }   
+        }
+
+    })
+})
+
+function razorpayPayment(order){
+    var options = {
+        "key": "rzp_test_5uPpdrMxeSFhjj", // Enter the Key ID generated from the Dashboard
+        "amount":order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "Brandsho",
+        "description": "Test Transaction",
+        "image": "https://example.com/your_logo",
+        "order_id":order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": function (response){
+            verifyPayment(response,order)
+        },
+        "prefill": {
+            "name": "Gaurav Kumar",
+            "email": "gaurav.kumar@example.com",
+            "contact": "9999999999"
+        },
+        "notes": {
+            "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+        
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+}
+
+function verifyPayment(payment,order){
+    $.ajax({
+        url:'/verify-payment',
+        data:{
+            payment,
+            order
+        },
+        method:'post',
+        success:(response)=>{
+            if(response.status){
+                location.href="/conformation/"+order.receipt
+            }else{
+                swal("payment failed")
+                
+            }
+        }
+    })
+}
+
+function cancelOrder(orderId){
+    console.log("lllllllllllllllllll");
+    swal({
+        title: "Are you sure?",
+        text: "You want to cancel order!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((value) => {
+        if (value) {
+            $.ajax({
+                url:'/admin/cancel-order/'+orderId,
+                method:'get',
+                success:(responce)=>{
+                    swal("order has been canceled!").then((val)=>{
+                        document.getElementById(orderId).innerHTML=""
+                    })
+                }
+            })
+        } 
+      });
+}
+
+function removeFromwishlist(prodId){
+    swal({
+        title: "Are you sure?",
+        text: "You want to Remove",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+    }).then((value) => {
+        if (value) {
+            $.ajax({
+                url: '/remove-wishlist/'+prodId,
+                method: 'get',
+                success: (response) => {
+                    if (response.status) {
+                            location.reload()                       
+                    }
+
+                }
+            })
+        }
+    });
+
+}
+
+function removeFromcart(cartId,prodId){
+    swal({
+        title: "Are you sure?",
+        text: "You want to Remove",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+    }).then((value) => {
+        if (value) {
+            $.ajax({
+                url: '/product-delete/'+cartId+'/'+prodId,
+                method: 'get',
+                success: (response) => {
+                    if (response.status) {
+                            location.reload()                       
+                    }
+
+                }
+            })
+        }
+    });
+
+}
+
+function cancelOrder(orderId){
+    swal({
+        title: "Are you sure?",
+        text: "You want to cancel the order ",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((value) => {
+        if (value) {
+            $.ajax({
+                url:'/cancel-order/'+orderId,
+                method:'get',
+                success:(responce)=>{
+                    swal(" has been cancelled!").then((val)=>{
+                        document.getElementById(orderId).innerHTML="cancelled"
+                    })
+                }
+            })
+        } 
+      });
+}
+
+$("#changeUserPassword-form").submit((e)=>{
+    e.preventDefault()
+    $.ajax({
+        url:'/change-password',
+        method:'post',
+        data:$('#changeUserPassword-form').serialize(),
+        success:(response)=>{
+            if(response.status){
+                swal("Password Changed!")
+                location.reload()
+            }else{
+                swal("Invalid current password")
+            }   
         }
 
     })

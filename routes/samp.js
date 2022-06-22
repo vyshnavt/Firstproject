@@ -9,8 +9,7 @@ router.get('/', function(req, res, next) {
   });
 
   router.get('/exam', function(req, res, next) {
-      console.log("kkkkkkkkkkkkk");
-      
+      console.log("kkkkkkkkkkkkk");     
       res.render('samp/exam')
   });
 
