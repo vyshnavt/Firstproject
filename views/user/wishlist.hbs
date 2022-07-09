@@ -1,65 +1,59 @@
-{{!-- <section class="banner-area organic-breadcrumb">
-        <div class="container">
-            <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
-                <div class="col-first">
-                    <h1>Shopping Cart</h1>
-                    <nav class="d-flex align-items-center">
-                        <a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
-                        <a href="category.html">Cart</a>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </section> --}}
-    <!-- End Banner Area -->
+<section class="cart_area ">
+    <hr>
+    <div class="container">
+        <div class="cart_inner">
+            {{#if product}}
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Product</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Option</th>
+                            <th scope="col">Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-    <!--================Cart Area =================-->
-    <section class="cart_area ">
-        <hr>
-        <div class="container">
-            <div class="cart_inner">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Product</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Option</th>
-                                <th scope="col">Remove</th>
-                            </tr>
-                        </thead>
-                        <tbody>
                         {{#each product}}
-                            <tr>
-                                <td>
-                                    <div class="media">
-                                        <a  href="/product-detail/{{this.wishproduct._id}}" >
+                        <tr>
+                            <td>
+                                <div class="media">
+                                    <a href="/product-detail/pp/{{this.wishproduct._id}}">
                                         <div class="d-flex">
 
                                             <img style="width:5rem;" src="/proimg/{{this.wishproduct._id}}.jpg" alt="">
                                         </div>
-                                        </a>
-                                        <div class="media-body">
-                                            <p>{{this.wishproduct.name}}</p>
-                                        </div>
+                                    </a>
+                                    <div class="media-body">
+                                        <p>{{this.wishproduct.name}}</p>
                                     </div>
-                                </td>
-                                <td>
-                                    <h5>{{this.wishproduct.price}}</h5>
-                                </td>
-                                <td>
-                                    <a href="" class="primary-btn" style="border-radius: 3px; line-height: 40px; padding: 0 10px;">Add to cart</a>
-                                </td>
-                                <td>
-                                    <a  onclick="removeFromwishlist('{{this.wishproduct._id}}')" class="primary-btn text-white" style="border-radius: 3px; line-height: 40px; padding: 0 10px;">Remove</a>
-                                
-                                </td>
-                            </tr>
+                                </div>
+                            </td>
+                            <td>
+                                <h5>{{this.wishproduct.price}}</h5>
+                            </td>
+                            <td>
+                                <a onclick="addToCart('{{this.wishproduct._id}}')" class="primary-btn text-white"
+                                    style="border-radius: 3px; line-height: 40px; padding: 0 10px;">Add to cart</a>
+                            </td>
+                            <td>
+                                <a onclick="removeFromwishlist('{{this.wishproduct._id}}')"
+                                    class="primary-btn text-white"
+                                    style="border-radius: 3px; line-height: 40px; padding: 0 10px;">Remove</a>
+
+                            </td>
+                        </tr>
                         {{/each}}
-                    
-                        </tbody>
-                    </table>
-                </div>
+
+                    </tbody>
+                </table>
             </div>
+            {{else}}
+            <div style="height:10rem;" class="d-flex justify-content-center">
+                <h3>Your Wishlist Is Empty</h3>
+            </div>
+            {{/if}}
         </div>
-    </section>
+    </div>
+</section>

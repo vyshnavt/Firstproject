@@ -1,6 +1,6 @@
 
 function addToCart(proId) {
-
+console.log("777777777777777777");
     $.ajax({
         url: '/add-tocart/' + proId,
         method: 'get',
@@ -9,6 +9,9 @@ function addToCart(proId) {
                 let count = $('#cart-count').html()
                 count = parseInt(count) + 1
                 $("#cart-count").html(count)
+                swal("Added to cart")
+            }else if(response.user){
+                location.href="/login"
             }
 
         }
@@ -20,7 +23,24 @@ function addTowishlist(proId) {
         url: '/add-wishlist/'+proId,
         method: 'get',
         success: (response) => {
-          
+            console.log(response);
+            let count = $('#wishlistcount').html()
+           if(response.login){
+            location.href='/login'
+           }else if(response.status){
+            count = parseInt(count) + 1
+            
+            
+                $("#wishlistcount").html(count)
+                document.getElementById("a"+proId).style.backgroundColor = "rgb(225 68 64";
+                document.getElementById("b"+proId).style.backgroundColor = "red";
+           }
+           else{
+            count = parseInt(count) - 1
+            
+                $("#wishlistcount").html(count)
+                document.getElementById("a"+proId).style.backgroundColor = "#828bb2"
+           }
 
         }
     })
@@ -45,9 +65,12 @@ function changeQuantity(cartId, ProId, PriceId, price, count) {
                     location.reload()
                 });
             } else {
-                document.getElementById('total').innerHTML = response.total
+                console.log(response);
+                document.getElementById('total').innerHTML = "₹"+ response.total
+                document.getElementById('offertotal').innerHTML = "- ₹"+ response.offertotal
+                document.getElementById('subtotal').innerHTML = response.total-response.offertotal-response.coupon
                 document.getElementById(ProId).value = quantity + count
-                document.getElementById(PriceId).innerHTML = price * (quantity + count)
+                document.getElementById(PriceId).innerHTML = "₹"+ price * (quantity + count)
             }
         }
     })
@@ -60,10 +83,9 @@ function blockUser(usrId, userName) {
         icon: "warning",
         buttons: true,
         dangerMode: true
-    }).then((willDelete) => {
-        if (willDelete) {
+    }).then((val) => {
+        if (val) {
             $.ajax({
-
                 url: '/admin/block-user/' + usrId,
                 method: 'get',
                 success: (response) => {
@@ -134,7 +156,6 @@ function deleteAdmin(adminId,adminName){
 }
 
 function blockAdmin(adminId,adminName){
-    console.log("lllllllllllllllllll");
     swal({
         title: "Are you sure?",
         text: "You want to block "+adminName,
@@ -179,7 +200,7 @@ function unblockAdmin(adminId,adminName){
         } 
       });
 }
-
+ 
 
 function deleteUser(UserName,UserId){
     swal({
@@ -313,7 +334,7 @@ function unblockCategory(catId,catName){
 function deleteProduct(prodName,prodId){
     swal({
         title: "Are you sure?",
-        text: "You want to block " + prodName,
+        text: "You want to delete " + prodName,
         icon: "warning",
         buttons: true,
         dangerMode: true
@@ -366,9 +387,11 @@ $("#checkOut-form").submit((e)=>{
         success:(response)=>{
             if(response.success){
                 location.href="/conformation/"+response.id
-            }else{
+            }else if(response.paypal){
+                location.href=response.link
+            }else{              
                 razorpayPayment(response)
-            }   
+            }
         }
 
     })
@@ -534,3 +557,155 @@ $("#changeUserPassword-form").submit((e)=>{
 
     })
 })
+
+function deleteOffer(prodId){
+    swal({
+        title: "Are you sure?",
+        text: "You want to delete this offer",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+    }).then((value) => {
+        if (value) {
+            $.ajax({
+                url: '/admin/delete-offer/'+prodId,
+                method: 'get',
+                success: (response) => {
+                    if (response.status) {
+                        swal("Deleted").then((value) => {
+                            location.reload()
+                        });
+                    }else{
+                        swal("This Offer is in use, Can't be deleted").then((value) => {
+                        });
+                    }
+
+                }
+            })
+        }
+    });
+
+}
+
+function removeOffer(ProdId){
+    swal({
+        title: "Are you sure?",
+        text: "You want to remove this offer",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((value) => {
+        if (value) {
+            $.ajax({
+                url:'/admin/remove-offer-product/'+ProdId,
+                method:'get',
+                success:(responce)=>{
+                    swal("Offer Removed!").then(()=>{
+                        location.reload()
+                    })
+                    
+                }
+            })
+        } 
+      });
+}
+
+function removeFromBanner(productId) {
+    swal({
+        title: "Are you sure?",
+        text: "You want to remove this product from Banner ",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+    }).then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+
+                url: '/admin/remove-from-banner/' +productId,
+                method: 'get',
+                success: (response) => {
+                        swal("Moved to Products").then((value) => {
+                            location.reload()
+                        });
+                }
+            })
+        }
+    });
+
+}
+
+
+function deleteCoupon(couponId) {
+    swal({
+        title: "Are you sure?",
+        text: "You want to delete the coupon",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+    }).then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+
+                url: '/admin/delete-coupon/'+couponId,
+                method: 'get',
+                success: (response) => {
+                        swal("Coupon deleted").then((value) => {
+                            location.reload()
+                        });
+                }
+            })
+        }
+    });
+
+}
+
+function chanStatus(selected,orderId) {
+    swal({
+        title: "Are you sure?",
+        text: "You want to Change status to " +selected,
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+    }).then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+
+                url: '/admin/change-status',
+                data:{
+                    selected,
+                    orderId
+                },
+                method: 'post',
+                success: (response) => {
+                    if(response){
+                        location.reload()
+                    }
+                }
+            })
+        }
+    });
+
+}
+
+function deleteAddress(addressId) {
+    swal({
+        title: "Are you sure?",
+        text: "You want to remove this Address",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+    }).then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+
+                url: '/delete-address/'+addressId,
+                method: 'get',
+                success: (response) => {
+                        location.reload()
+                }
+            })
+        }
+    });
+
+}

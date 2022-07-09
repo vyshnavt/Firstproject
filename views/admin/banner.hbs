@@ -1,0 +1,410 @@
+<body id="reportsPage" class="bg02">
+    <div class="" id="home">
+        <div class="container">
+            <div class="row tm-content-row tm-mt-big">
+                <div class="col-12">
+                    <div class="bg-white tm-block h-100">
+                        <div class="row">
+                            <div class=" col-sm-12 col-md-6">
+                                <h2 class="tm-block-title d-inline-block">Banner</h2>
+                            </div>
+                            <div class=" col-md-6 col-sm-12 text-right">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#a555"
+                                    data-whatever="@mdo">Add New banner</button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="usertable" class="table table-hover table-striped tm-table-striped-even mt-3">
+                                <thead>
+                                    <tr class="tm-bg-gray">
+                                        <th scope="col">No</th>
+                                        <th scope="col">Product Name</th>
+                                        <th scope="col" class="">Size</th>
+                                        <th scope="col" class="">Price</th>
+                                        <th scope="col" class="">Catagory</th>
+                                        <th scope="col" class="">Quantity</th>
+                                        <th scope="col">Image</th>
+                                        <th scope="col">Edit</th>
+                                        <th scope="col">Delete</th>
+                                        <th scope="col">Remove From Banner</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each data}}
+                                    <tr>
+                                        <td class=" pt-3">{{inc @index}}</td>
+                                        <td class="tm-product-name pt-3">{{name}}</td>
+                                        <td class=" pt-3 text-center">{{size}}</td>
+                                        <td class=" pt-3 text-center">{{price}}</td>
+                                        <td class=" pt-3 text-center">{{catagory}}</td>
+                                        <td class=" pt-3 text-center">{{quantity}}</td>
+                                        <td class=""><img style="width:50px; height:50px" src="/proimg/{{this._id}}.jpg"
+                                                alt=""></td>
+                                        <td class=" pt-3 text-center"><a type="button" data-toggle="modal"
+                                                data-target="#a{{this._id}}" data-whatever="@mdo"><i
+                                                    class="far fa-edit tm-trash-icon"></i></a></td>
+                                        <td class="pt-3 text-center"><a
+                                                onclick="deleteProduct('{{this.name}}','{{this._id}}')"><i
+                                                    class="fas fa-trash-alt tm-trash-icon "></i></a></i></td>
+                                        <td class="text-center"><a class="text-dark btn btn-primary"
+                                                onclick="removeFromBanner('{{this._id}}')">Remove</a></td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                        {{!-- edit --}}
+                        {{#each data}}
+                        <div class="modal fade" id="a{{this._id}}" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Edit New Product</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="/admin/update-product/{{this._id}}" method="post"
+                                            enctype="multipart/form-data" class="tm-edit-product-form">
+                                            <div class="input-group mb-3">
+                                                <label
+                                                    class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Product
+                                                    Name</label>
+                                                <input name="name" type="text"
+                                                    class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
+                                                    value="{{this.name}}" id="name" onkeyup="Namevalidate()">
+                                            </div>
+                                            <div class="text-danger text-center" id="nameerror"></div>
+                                            <div class="input-group mb-3">
+                                                <label for="expire_date"
+                                                    class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Size
+                                                </label>
+                                                <input id="size" name="size" type="text" value="{{this.size}}"
+                                                    class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
+                                                    data-large-mode="true" onkeyup="Sizevalidate()">
+                                            </div>
+                                            <p class="text-danger text-center" id="sizeerror"></p>
+
+                                            <div class="input-group mb-3">
+                                                <label
+                                                    class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Price</label>
+                                                <input id="price" name="price" value="{{this.price}}" type="text"
+                                                    class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
+                                                    data-large-mode="true" onkeyup="Pricevalidate()">
+                                            </div>
+                                            <p class="text-danger text-center" id="priceerror"></p>
+                                            <div class="input-group mb-3">
+                                                <label for="expire_date"
+                                                    class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Category
+                                                </label>
+                                                <select name="catagory" class="form-control " style="padding: 11px 18px"
+                                                    id="catagory">
+                                                    <option selected>{{this.catagory}}</option>
+                                                    {{#each ../category}}
+                                                    <option value="{{this.name}}">{{this.name}}</option>
+                                                    {{/each}}
+                                                </select>
+                                            </div>
+                                            <p class="text-danger text-center" id="categoryerror"></p>
+                                            <div class="input-group mb-3">
+                                                <label for="expire_date"
+                                                    class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Quantity
+                                                </label>
+                                                <input id="quantity" name="quantity" value="{{this.quantity}}"
+                                                    type="text"
+                                                    class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
+                                                    data-large-mode="true" onkeyup="Quantityvalidate()">
+                                            </div>
+                                            <p class="text-danger text-center" id="quantityerror"></p>
+                                            <div class="col-xl-4 col-lg-4 col-md-12 me-auto mb-4">
+                                                <label class="col-12 mt-4">Image</label>
+                                                <img src="/proimg/{{this._id}}.jpg" style="width:50px; height:50px;"
+                                                    alt="">
+                                                <input type="file" name="image">
+                                            </div>
+
+                                            <div class="input-group mb-3">
+                                                <div class="ml-auto col-xl-8 col-lg-8 col-md-8 col-sm-7 pl-0">
+                                                    <button type="submit" onclick="return validate()"
+                                                        class="btn btn-primary">Add
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/each}}
+
+                        {{!-- add --}}
+                        <div class="modal fade" id="a555" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Add New Product</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="/admin/add-banner" method="post" enctype="multipart/form-data"
+                                            class="tm-edit-product-form">
+                                            <div class="input-group mb-3">
+                                                <label
+                                                    class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Product
+                                                    Name</label>
+                                                <input name="name" type="text"
+                                                    class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
+                                                    id="addname" onkeyup="addNamevalidate()">
+                                            </div>
+                                            <div class="text-danger text-center" id="addnameerror"></div>
+                                            <div class="input-group mb-3">
+                                                <label for="expire_date"
+                                                    class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Size
+                                                </label>
+                                                <input id="addsize" name="size" type="text"
+                                                    class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
+                                                    data-large-mode="true" onkeyup="addSizevalidate()">
+                                            </div>
+                                            <p class="text-danger text-center" id="addsizeerror"></p>
+
+                                            <div class="input-group mb-3">
+                                                <label
+                                                    class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Price</label>
+                                                <input id="addprice" name="price" type="text"
+                                                    class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
+                                                    data-large-mode="true" onkeyup="addPricevalidate()">
+                                                <input id="ize" name="status" value="true" type="text" hidden>
+                                                <input id="ize" name="banner" value="true" type="text" hidden>
+                                            </div>
+                                            <p class="text-danger text-center" id="addpriceerror"></p>
+                                            <div class="input-group mb-3">
+                                                <label for="expire_date"
+                                                    class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Category
+                                                </label>
+                                                <select name="catagory" class="form-control " style="padding: 11px 18px"
+                                                    id="catagory">
+                                                    {{#each category}}
+                                                    <option value="{{this.name}}">{{this.name}}</option>
+                                                    {{/each}}
+                                                </select>
+                                            </div>
+                                            <p class="text-danger text-center" id="addcategoryerror"></p>
+                                            <div class="input-group mb-3">
+                                                <label for="expire_date"
+                                                    class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Quantity
+                                                </label>
+                                                <input id="addquantity" name="quantity" type="text"
+                                                    class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
+                                                    data-large-mode="true" onkeyup="addQuantityvalidate()">
+                                            </div>
+                                            <p class="text-danger text-center" id="addquantityerror"></p>
+                                            <div class="col-xl-4 col-lg-4 col-md-12 me-auto mb-4">
+                                                <label class="col-12 mt-4">Image</label>
+                                                <input type="file" name="image" required>
+                                            </div>
+
+                                            <div class="input-group mb-3">
+                                                <div class="ml-auto col-xl-8 col-lg-8 col-md-8 col-sm-7 pl-0">
+                                                    <button type="submit" onclick="return addvalidate()"
+                                                        class="btn btn-primary">Add
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function Namevalidate() {
+            let Name = document.getElementById('name').value
+            let Nameerror = document.getElementById('nameerror')
+            if (Name == "") {
+                Nameerror.innerHTML = "This Field Must Be Required!"
+                return false
+            }
+            if (!Name.match(/[a-zA-Z]/)) {
+                Nameerror.innerHTML = "Only Alphbets are allowed"
+                return false
+
+            }
+            Nameerror.innerHTML = ""
+            return true
+
+        }
+
+        function Sizevalidate() {
+            const Size = document.getElementById("size").value
+            const Sizeerror = document.getElementById("sizeerror")
+            if (Size == "") {
+                Sizeerror.innerHTML = "This Field Must Be Required!"
+                return false
+            }
+            if (!Size.match(/[0-9]/)) {
+                Sizeerror.innerHTML = "Only Numbers Are Allowed"
+                return false
+            }
+            Sizeerror.innerHTML = ""
+            return true
+        }
+
+        function Pricevalidate() {
+            const Price = document.getElementById("price").value
+            const Priceerror = document.getElementById("priceerror")
+            if (Price == "") {
+                Priceerror.innerHTML = "This Field Must Be Required!"
+                return false
+            }
+            if (!Price.match(/[0-9]/)) {
+                Priceerror.innerHTML = "Only Numbers Are Allowed"
+                return false
+            }
+            Priceerror.innerHTML = ""
+            return true
+        }
+
+        function Quantityvalidate() {
+            const Quantity = document.getElementById("quantity").value
+            const Quantityerror = document.getElementById("quantityerror")
+            if (Quantity == "") {
+                Quantityerror.innerHTML = "This Field Must Be Required!"
+                return false
+            }
+            if (!Quantity.match(/[0-9]/)) {
+                Quantityerror.innerHTML = "Only Numbers Are Allowed"
+                return false
+            }
+            Quantityerror.innerHTML = ""
+            return true
+        }
+
+        function Categoryvalidate() {
+            let Category = document.getElementById('category').value
+            let Categoryerror = document.getElementById('categoryerror')
+            if (Category == "") {
+                Categoryerror.innerHTML = "This Field Must Be Required!"
+                return false
+            }
+            if (!Category.match(/[a-zA-Z]/)) {
+                Categoryerror.innerHTML = "Only Alphbets are allowed"
+                return false
+
+            }
+            Categoryerror.innerHTML = ""
+            return true
+
+        }
+
+        function validate() {
+            if (Namevalidate() && Sizevalidate() && Pricevalidate() && Quantityvalidate()) {
+                return true
+            }
+            return false
+        }
+    </script>
+
+
+    <script>
+        function addNamevalidate() {
+            let Name = document.getElementById('addname').value
+            let Nameerror = document.getElementById('addnameerror')
+            if (Name == "") {
+                Nameerror.innerHTML = "This Field Must Be Required!"
+                return false
+            }
+            if (!Name.match(/[a-zA-Z]/)) {
+                Nameerror.innerHTML = "Only Alphbets are allowed"
+                return false
+
+            }
+            Nameerror.innerHTML = ""
+            return true
+
+        }
+
+        function addSizevalidate() {
+            const Size = document.getElementById("addsize").value
+            const Sizeerror = document.getElementById("addsizeerror")
+            if (Size == "") {
+                Sizeerror.innerHTML = "This Field Must Be Required!"
+                return false
+            }
+            if (!Size.match(/[0-9]/)) {
+                Sizeerror.innerHTML = "Only Numbers Are Allowed"
+                return false
+            }
+            Sizeerror.innerHTML = ""
+            return true
+        }
+
+        function addPricevalidate() {
+            const Price = document.getElementById("addprice").value
+            const Priceerror = document.getElementById("addpriceerror")
+            if (Price == "") {
+                Priceerror.innerHTML = "This Field Must Be Required!"
+                return false
+            }
+            if (!Price.match(/[0-9]/)) {
+                Priceerror.innerHTML = "Only Numbers Are Allowed"
+                return false
+            }
+            Priceerror.innerHTML = ""
+            return true
+        }
+
+        function addQuantityvalidate() {
+            const Quantity = document.getElementById("addquantity").value
+            const Quantityerror = document.getElementById("addquantityerror")
+            if (Quantity == "") {
+                Quantityerror.innerHTML = "This Field Must Be Required!"
+                return false
+            }
+            if (!Quantity.match(/[0-9]/)) {
+                Quantityerror.innerHTML = "Only Numbers Are Allowed"
+                return false
+            }
+            Quantityerror.innerHTML = ""
+            return true
+        }
+
+        function addCategoryvalidate() {
+            let Category = document.getElementById('addcategory').value
+            let Categoryerror = document.getElementById('addcategoryerror')
+            if (Category == "") {
+                Categoryerror.innerHTML = "This Field Must Be Required!"
+                return false
+            }
+            if (!Category.match(/[a-zA-Z]/)) {
+                Categoryerror.innerHTML = "Only Alphbets are allowed"
+                return false
+
+            }
+            Categoryerror.innerHTML = ""
+            return true
+
+        }
+
+        function addvalidate() {
+            if (addNamevalidate() && addSizevalidate() && addPricevalidate() && addQuantityvalidate()) {
+                return true
+            }
+            return false
+        }
+    </script>
+</body>
+
+</html>

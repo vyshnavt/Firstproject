@@ -1,0 +1,80 @@
+<body class="bg02">
+    <section class="m-3 p-2" style="background: #fff;">
+        <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between col-md-8 pt-4">
+                <div>Total COD :{{reporttotal.cod}}</div>
+                <div>Total Paypal :{{reporttotal.paypal}}</div>
+                <div>Total Razor Pay :{{reporttotal.razor}}</div>
+                <div>Total Amount :{{reporttotal.total}}</div>
+            </div>
+
+
+            <div class="p-2 col-md-4">
+                <a class="btn btn-primary" id="PDF">Pdf Download</a>
+                <a class="btn btn-primary" id="EXCEL">EXCEL Download</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="p-3" style="background: #fff;">
+
+
+        <div>
+            <table class="table" id="usertable">
+                <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Products</th>
+                        <th scope="col">UserName</th>
+                        <th scope="col">Mobile</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Payment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each data}}
+                    <tr>
+                        <td scope="row" class="pt-4">{{inc @index}}</td>
+
+                        <td class="pt-4">{{#each productdetail}}<div>{{name}}</div>
+                            <hr>{{/each}}
+                        </td>
+                        <td class="pt-4">{{userdetail.name}}</td>
+                        <td class="pt-4">{{userdetail.mobile}}</td>
+                        <td class="pt-4">{{subtotal}}</td>
+                        <td class="pt-4">{{date}}</td>
+                        <td class="pt-4">{{paymentMethod}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <script>
+
+        window.onload = function () {
+            console.log('excellllllllllllllllllll')
+            console.log(window);
+            document.getElementById('EXCEL').addEventListener('click', () => {
+                var table2excel = new Table2Excel();
+                table2excel.export(document.querySelectorAll("#usertable"));
+            })
+            document.getElementById('PDF').addEventListener('click', () => {
+                const pdf = this.document.getElementById('usertable')
+                console.log(pdf);
+                console.log(window);
+                let opt = {
+                    margin: 0,
+                    filename: 'Report.pdf',
+                    image: { type: 'jpg', quality: 0.98 },
+                    html2canvas: { scale: 4 },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
+                };
+
+                html2pdf().from(pdf).set(opt).save();
+            })
+        }
+    </script>
+
+</body>

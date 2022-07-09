@@ -1,6 +1,6 @@
 const width_threshold = 480;
 
-function drawLineChart() {
+function drawLineChart(jan, feb, Mar, apr, may, jun, jul,aug,sep,oct,nov,dec) {
   if ($("#lineChart").length) {
     ctxLine = document.getElementById("lineChart").getContext("2d");
     optionsLine = {
@@ -30,12 +30,17 @@ function drawLineChart() {
           "April",
           "May",
           "June",
-          "July"
+          "July",
+          "Augest",
+          "September",
+          "October",
+          "November",
+          "December"
         ],
         datasets: [
           {
-            label: "Latest Hits",
-            data: [88, 68, 79, 57, 56, 55, 70],
+            label: "Monthly sales",
+            data: [jan, feb, Mar, apr, may, jun, jul,aug,sep,oct,nov,dec],
             fill: false,
             borderColor: "rgb(75, 192, 192)",
             lineTension: 0.1
@@ -63,7 +68,7 @@ function drawLineChart() {
   }
 }
 
-function drawBarChart() {
+function drawBarChart(paypal,razor,cod) {
   if ($("#barChart").length) {
     ctxBar = document.getElementById("barChart").getContext("2d");
 
@@ -90,11 +95,11 @@ function drawBarChart() {
     configBar = {
       type: "bar",
       data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+        labels: ["Paypal", "RazorPay", "COD"],
         datasets: [
           {
-            label: "# of Hits",
-            data: [12, 19, 3, 5, 2, 3],
+            label: "# Total Payment",
+            data: [paypal,razor,cod],
             backgroundColor: [
               "rgba(255, 99, 132, 0.2)",
               "rgba(54, 162, 235, 0.2)",
@@ -122,7 +127,7 @@ function drawBarChart() {
   }
 }
 
-function drawPieChart() {
+function drawPieChart(paypal,razor,cod) {
   if ($("#pieChart").length) {
     ctxPie = document.getElementById("pieChart").getContext("2d");
     optionsPie = {
@@ -135,15 +140,15 @@ function drawPieChart() {
       data: {
         datasets: [
           {
-            data: [4600, 5400],
+            data: [paypal,razor,cod],
             backgroundColor: [
               window.chartColors.purple,
               window.chartColors.green
             ],
-            label: "Storage"
+            label: "Order"
           }
         ],
-        labels: ["Used: 4,600 GB", "Available: 5,400 GB"]
+        labels: ["Paypal", "RazorPay", "COD"]
       },
       options: optionsPie
     };

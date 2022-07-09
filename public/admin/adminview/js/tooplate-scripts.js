@@ -94,7 +94,7 @@ function drawBarChart() {
         datasets: [
           {
             label: "# of Hits",
-            data: [12, 19, 3, 5, 2, 3],
+            data: [1, 1, 1, 1, 1, 1],
             backgroundColor: [
               "rgba(255, 99, 132, 0.2)",
               "rgba(54, 162, 235, 0.2)",
@@ -135,7 +135,7 @@ function drawPieChart() {
       data: {
         datasets: [
           {
-            data: [4600, 5400],
+            data: [0000, 5400],
             backgroundColor: [
               window.chartColors.purple,
               window.chartColors.green
@@ -143,7 +143,7 @@ function drawPieChart() {
             label: "Storage"
           }
         ],
-        labels: ["Used: 4,600 GB", "Available: 5,400 GB"]
+        labels: ["Used: 0000 GB", "Available: 5,400 GB"]
       },
       options: optionsPie
     };

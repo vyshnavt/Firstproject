@@ -1,57 +1,62 @@
-<section class="pt-4">
-    <table class="table" id="usertable">
+<body class="bg02">
+
+  <section class="mt-4 p-3" style="background: #fff;">
+    <div class="table-responsive">
+      <table class="table" id="usertable">
         <thead>
-            <tr>
-                <th scope="col">No</th>
-                <th scope="col">UserName</th>
-                <th scope="col">Email</th>
-                <th scope="col">MobileNumber</th>
-                <th scope="col">BLock</th>
-                <th scope="col">Delete</th>
-            </tr>
+          <tr>
+            <th scope="col">No</th>
+            <th scope="col">UserName</th>
+            <th scope="col">Email</th>
+            <th scope="col">MobileNumber</th>
+            <th scope="col">BLock</th>
+            <th scope="col">Delete</th>
+          </tr>
         </thead>
         <tbody>
-            {{#each data}}
-                <tr>
-                    <td scope="row" class="pt-4">{{inc @index}}</td>
-                    <td class="pt-4">{{name}}</td>
-                    <td class="pt-4">{{email}}</td>
-                    <td class="pt-4">{{mobile}}</td>
-                    {{#if status}}
-                    {{!-- href="/admin/block-user/{{this._id}}" --}}
-                    <td><a  class="btn btn-danger" id="{{this._id}}" onclick="blockUser('{{this._id}}','{{this.name}}')">Block</a></td>
-                    {{else}} 
-                    <td><a class="btn btn-danger" onclick="unblockUser('{{this._id}}','{{this.name}}')">UnBlock</a></td>
-                    {{/if}}
-                    {{!-- <td class="pt-4"><a  href="/admin/delete-user/{{this._id}}"><i class="fas fa-trash-alt tm-trash-icon "></i></a></td> --}}
-                     <td class="pt-4"><a  onclick="deleteUser('{{this.name}}','{{this._id}}')"><i class="fas fa-trash-alt tm-trash-icon "></i></a></i></td> 
-                    
-                </tr>
-            {{/each}}
+          {{#each data}}
+          <tr>
+            <td scope="row" class="pt-4">{{inc @index}}</td>
+            <td class="pt-4">{{name}}</td>
+            <td class="pt-4">{{email}}</td>
+            <td class="pt-4">{{mobile}}</td>
+            {{#if status}}
+            <td><a class="btn btn-danger" id="{{this._id}}"
+                onclick="blockUser('{{this._id}}','{{this.name}}')">Block</a></td>
+            {{else}}
+            <td><a class="btn btn-danger" onclick="unblockUser('{{this._id}}','{{this.name}}')">UnBlock</a></td>
+            {{/if}}
+            <td class="pt-4"><a onclick="deleteUser('{{this.name}}','{{this._id}}')"><i
+                  class="fas fa-trash-alt tm-trash-icon "></i></a></i></td>
+
+          </tr>
+          {{/each}}
         </tbody>
-    </table>
-<!-- Button trigger modal -->
+      </table>
+    </div>
+    <!-- Button trigger modal -->
 
 
-<!-- Modal -->
-{{#each data}}
-<div class="modal fade" id="{{@index}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Are You Sure You want to delete?</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-        
+    <!-- Modal -->
+    {{#each data}}
+    <div class="modal fade" id="{{@index}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Are You Sure You want to delete?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-{{/each}}
-</section>
+    {{/each}}
+  </section>
 
-
+</body>

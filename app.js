@@ -7,13 +7,14 @@ let helpers = require("handlebars-helpers")
 let hbs = require('express-handlebars')
 let session=require('express-session')
 let fileUpload= require('express-fileupload');
+var flash = require('connect-flash');
 
 let db=require('./config/connection')
 
 var userRouter = require('./routes/user');
 var adminRouter = require('./routes/admin');
 var sampRouter = require('./routes/samp');
-
+const HBS = hbs.create({});
 var app = express();
 
 // view engine setup
@@ -41,11 +42,19 @@ app.use((req,res,next)=>{
 })
 
 app.use(session({secret:"key",cookie:{}}))
+app.use(flash());
 
 db.connect((err)=>{
   if(err) console.log("fail"+err)
   else console.log("sucess");
 })
+
+HBS.handlebars.registerHelper("ifCompare", function (v1, v2, options) {
+  if (v1 === v2) {
+    return options.fn(this);
+  }
+  return options.inverse(this);
+});
 
 app.use('/', userRouter);
 app.use('/admin', adminRouter);
@@ -53,7 +62,8 @@ app.use('/samp', sampRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+  //next(createError(404));
+  res.render('user/pagenotfound',{notfound:true})
 });
 
 // error handler
@@ -63,7 +73,7 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
+  res.status(err.status || 500); 
   res.render('error');
 });
 

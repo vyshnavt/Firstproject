@@ -1,150 +1,136 @@
-{{!-- <section class="banner-area organic-breadcrumb">
-		<div class="container">
-			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
-				<div class="col-first">
-					<h1>Login/Register</h1>
-					<nav class="d-flex align-items-center">
-						<a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
-						<a href="category.html">Login/Register</a>
-					</nav>
-				</div>
-			</div>
-		</div>
-	</section> --}}
-
 <section class="login_box_area section_gap pt-4">
-		<div class="container">
-			<div class="row">
-                <div class="col-md-1"></div>
-				<div class="col-lg-10">
-					<div class="login_form_inner">
-						<h3>SignUp Form</h3>
-						<form class="row login_form" action="/signup" method="post" id="contactForm">
-							<div class="col-md-12 form-group">
-								<input type="text" class="form-control" id="name" name="name" placeholder="Username" onkeyup="namevalidate()" >
-								<div class="text-danger" id="name-error"></div>
-							</div>
-							<div class="col-md-12 form-group">
-								<input type="email" class="form-control" id="email" name="email" placeholder="Email" onkeyup="emailvalidate()" >
-								<div class="text-danger" id="email-error"></div>
-							</div>
-                            <div class="col-md-12 form-group">
-								<input type="text" class="form-control" id="mobile" name="mobile" placeholder="Mobile Number" onkeyup="numbervalidate()"  >
-								<div class="text-danger" id="mobile-error"></div>
-							</div>
-                            <div class="col-md-12 form-group">
-								<input type="password" class="form-control" id="password" name="password" placeholder="Password" onkeyup="passwordvalidate()"  >
-								<div class="text-danger" id="password-error"></div>
-							</div>
-                            <div class="col-md-12 form-group">
-								<input type="password" class="form-control" id="re-password" name="repassword" placeholder="Re-Enter Password" onkeyup="passwordcompare()"  >
-								<div class="text-danger" id="re-password-error"></div>
-							</div>
-							{{#if variable}}
-							 <div class="text-danger col-md-12 form-group">{{variable}}</div>
-							{{/if}}
-							<div class="col-md-12 form-group">
-								<button type="submit" value="submit" onclick="return validate()" class="primary-btn">Sign Up</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-	<script>
-  function namevalidate(){
-    let Name=document.getElementById('name').value
-    let Nameerror=document.getElementById('name-error')
-    if(Name==""){
-      Nameerror.innerHTML="cannot be empty"
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1"></div>
+      <div class="col-lg-10">
+        <div class="login_form_inner">
+          <h3>SignUp Form</h3>
+          <form class="row login_form" action="/signup" method="post" id="contactForm">
+            <div class="col-md-12 form-group">
+              <input type="text" class="form-control" id="name" name="name" placeholder="Username"
+                onkeyup="namevalidate()">
+              <div class="text-danger" id="name-error"></div>
+            </div>
+            <div class="col-md-12 form-group">
+              <input type="email" class="form-control" id="email" name="email" placeholder="Email"
+                onkeyup="emailvalidate()">
+              <div class="text-danger" id="email-error"></div>
+            </div>
+            <div class="col-md-12 form-group">
+              <input type="text" class="form-control" id="mobile" name="mobile" placeholder="Mobile Number"
+                onkeyup="numbervalidate()">
+              <div class="text-danger" id="mobile-error"></div>
+            </div>
+            <div class="col-md-12 form-group">
+              <input type="password" class="form-control" id="password" name="password" placeholder="Password"
+                onkeyup="passwordvalidate()">
+              <div class="text-danger" id="password-error"></div>
+            </div>
+            <div class="col-md-12 form-group">
+              <input type="password" class="form-control" id="re-password" name="repassword"
+                placeholder="Re-Enter Password" onkeyup="passwordcompare()">
+              <div class="text-danger" id="re-password-error"></div>
+            </div>
+            {{#if variable}}
+            <div class="text-danger col-md-12 form-group">{{variable}}</div>
+            {{/if}}
+            <div class="col-md-12 form-group">
+              <button type="submit" value="submit" onclick="return validate()" class="primary-btn">Sign Up</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  function namevalidate() {
+    let Name = document.getElementById('name').value
+    let Nameerror = document.getElementById('name-error')
+    if (Name == "") {
+      Nameerror.innerHTML = "cannot be empty"
       return false
     }
-    if(Name.match(/[^a-zA-Z]/)){
-      Nameerror.innerHTML="Only Alphbets are allowed"
+    if (Name.match(/[^a-zA-Z]/)) {
+      Nameerror.innerHTML = "Only Alphbets are allowed"
       return false
 
     }
-    Nameerror.innerHTML=""
+    Nameerror.innerHTML = ""
     return true
 
   }
 
-  function emailvalidate(){
-    const Email=document.getElementById("email").value
-    const Emailerror=document.getElementById("email-error")
-      if(Email==""){
-        Emailerror.innerHTML="This field must be required!"
-        return false
-      }
-      if(!Email.match(/^[^ ]+@[^ ]+\.[a-z]{2,3}$/))
-      {
-        Emailerror.innerHTML="Enter a valid email"
-        return false
-      }
-      Emailerror.innerHTML=""
-      return true
+  function emailvalidate() {
+    const Email = document.getElementById("email").value
+    const Emailerror = document.getElementById("email-error")
+    if (Email == "") {
+      Emailerror.innerHTML = "This field must be required!"
+      return false
+    }
+    if (!Email.match(/^[^ ]+@[^ ]+\.[a-z]{2,3}$/)) {
+      Emailerror.innerHTML = "Enter a valid email"
+      return false
+    }
+    Emailerror.innerHTML = ""
+    return true
   }
 
-  function passwordvalidate(){
-    const Password=document.getElementById("password").value
-    const Passworderror=document.getElementById("password-error")
-      if(Password==""){
-        Passworderror.innerHTML="This field must be required!"
-        return false
-      }
-      if(Password.length<6)
-      {
-        Passworderror.innerHTML="Must be 6 charactertics!"
-        return false
-      }
-      Passworderror.innerHTML=""
-      return true
+  function passwordvalidate() {
+    const Password = document.getElementById("password").value
+    const Passworderror = document.getElementById("password-error")
+    if (Password == "") {
+      Passworderror.innerHTML = "This field must be required!"
+      return false
+    }
+    if (Password.length < 6) {
+      Passworderror.innerHTML = "Must be 6 charactertics!"
+      return false
+    }
+    Passworderror.innerHTML = ""
+    return true
   }
 
- function passwordcompare(){
-       const Password=document.getElementById("password").value
-	  const RePassword=document.getElementById("re-password").value
-    const RePassworderror=document.getElementById("re-password-error")
-      if(RePassword==""){
-        RePassworderror.innerHTML="This field must be required!"
-        return false
-      }
-      if(RePassword!=Password)
-      {
-        RePassworderror.innerHTML="Password must be equal"
-        return false
-      }
-      RePassworderror.innerHTML=""
-      return true
+  function passwordcompare() {
+    const Password = document.getElementById("password").value
+    const RePassword = document.getElementById("re-password").value
+    const RePassworderror = document.getElementById("re-password-error")
+    if (RePassword == "") {
+      RePassworderror.innerHTML = "This field must be required!"
+      return false
+    }
+    if (RePassword != Password) {
+      RePassworderror.innerHTML = "Password must be equal"
+      return false
+    }
+    RePassworderror.innerHTML = ""
+    return true
   }
 
-    function numbervalidate(){
-      const Mobile=document.getElementById("mobile").value
-    const Mobileerror=document.getElementById("mobile-error")
-      if(Mobile==""){
-        Mobileerror.innerHTML="This field must be required!"
-        return false
-      }
-	  if(Mobile.match(/[^0-9]/))
-      {
-        Mobileerror.innerHTML="Only Numbers allowed!"
-        return false
-      }
-      if(Mobile.length<10||Mobile.length>10)
-      {
-        Mobileerror.innerHTML="Must be 10 charactertics!"
-        return false
-      }
-      Mobileerror.innerHTML=""
-      return true
+  function numbervalidate() {
+    const Mobile = document.getElementById("mobile").value
+    const Mobileerror = document.getElementById("mobile-error")
+    if (Mobile == "") {
+      Mobileerror.innerHTML = "This field must be required!"
+      return false
+    }
+    if (Mobile.match(/[^0-9]/)) {
+      Mobileerror.innerHTML = "Only Numbers allowed!"
+      return false
+    }
+    if (Mobile.length < 10 || Mobile.length > 10) {
+      Mobileerror.innerHTML = "Must be 10 charactertics!"
+      return false
+    }
+    Mobileerror.innerHTML = ""
+    return true
   }
 
-  function validate(){
-    if(namevalidate()||emailvalidate()||numbervalidate()||passwordcompare()||passwordvalidate()){
+  function validate() {
+    if (namevalidate() || emailvalidate() || numbervalidate() || passwordcompare() || passwordvalidate()) {
       return true
     }
-      return false
+    return false
   }
 
 </script>

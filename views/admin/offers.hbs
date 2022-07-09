@@ -1,0 +1,312 @@
+<body id="reportsPage" class="bg02">
+    <div class="" id="home">
+        <div class="container">
+            <div class="row tm-content-row tm-mt-big">
+                <div class="col-7">
+                    <div class="bg-white p-2 h-100">
+                        <div class="row">
+                            <div class=" col-sm-12 col-md-6">
+                                <h2 class="tm-block-title d-inline-block">Products</h2>
+
+                            </div>
+                            <div class=" col-md-6 col-sm-12 text-right">
+
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="usertable" class="table table-hover table-striped tm-table-striped-even mt-3">
+                                <thead>
+                                    <tr class="tm-bg-gray">
+                                        <th scope="col">No</th>
+                                        <th scope="col">Product Name</th>
+                                        <th scope="col" class="text-center">Price</th>
+                                        <th scope="col">Image</th>
+                                        <th scope="col">Add Offer</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each data}}
+                                    <tr>
+                                        <td class=" pt-3">{{inc @index}}</td>
+                                        <td class=" pt-3">{{name}}</td>
+                                        <td class=" pt-3">{{price}}</td>
+                                        <td class=""><img style="width:50px; height:50px" src="/proimg/{{this._id}}.jpg"
+                                                alt=""></td>
+                                        {{#if offer}}
+                                        <td><a onclick="removeOffer('{{this._id}}')" class="btn btn-light">Remove
+                                                Offer</a></td>
+                                        {{else}}
+                                        <td><button type="button" class="btn btn-primary" data-toggle="modal"
+                                                data-target="#b{{this._id}}" data-whatever="@mdo">Add Offer</button>
+                                        </td>
+                                        <td class="pt-3"></td>
+                                        {{/if}}
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                        {{!-- edit --}}
+                        {{#each data}}
+                        <div class="modal fade" id="a{{ this._id }}" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Product</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="/admin/update-product/{{ this._id }}" method="post"
+                                            enctype="multipart/form-data" class="tm-edit-product-form">
+                                            <div class="input-group mb-3">
+                                                <label
+                                                    class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Product
+                                                    Name</label>
+                                                <input name="name" type="text"
+                                                    class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
+                                                    value="{{ this.name }}" id="name" onkeyup="Namevalidate()">
+                                                <p class="text-danger text-center" id="nameerror"></p>
+                                            </div>
+                                            <div class="input-group mb-3"><label for="expire_date"
+                                                    class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Size</label><input
+                                                    id="size" name="size" type="text" value="{{ this.size }}"
+                                                    class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
+                                                    data-large-mode="true" onkeyup="Sizevalidate()">
+                                                <p class="text-danger text-center" id="sizeerror"></p>
+                                            </div>
+                                            <div class="input-group mb-3"><label
+                                                    class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Price</label><input
+                                                    id="price" name="price" value="{{ this.price }}" type="text"
+                                                    class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
+                                                    data-large-mode="true" onkeyup="Pricevalidate()">
+                                                <p class="text-danger text-center" id="priceerror"></p>
+                                            </div>
+                                            <div class="input-group mb-3"><label
+                                                    class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Amount</label><input
+                                                    id="amount" name="amount" value="{{ this.amount }}" type="text"
+                                                    class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
+                                                    data-large-mode="true" onkeyup="Amountvalidate()">
+                                                <p class="text-danger text-center" id="amounterror"></p>
+                                            </div>
+                                            <div class="input-group mb-3"><label for="expire_date"
+                                                    class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Category</label><input
+                                                    id="category" name="catagory" type="text"
+                                                    class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
+                                                    data-large-mode="true" onkeyup="Categoryvalidate()"> <select
+                                                    name="catagory" class="form-control " style="padding: 11px 18px"
+                                                    id="catagory">
+                                                    <option selected>{{ this.catagory }}</option>{{#each ../category}}
+                                                    <option value="{{ this.name }}">{{ this.name }}</option>{{/each}}
+                                                </select>
+                                                <p class="text-danger text-center" id="categoryerror"></p>
+                                            </div>
+                                            <div class="input-group mb-3"><label for="expire_date"
+                                                    class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Quantity</label><input
+                                                    id="quantity" name="quantity" value="{{ this.quantity }}"
+                                                    type="text"
+                                                    class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
+                                                    data-large-mode="true" onkeyup="Quantityvalidate()">
+                                                <p class="text-danger text-center" id="quantityerror"></p>
+                                            </div>
+                                            <div class="col-xl-4 col-lg-4 col-md-12 me-auto mb-4"><label
+                                                    class="col-12 mt-4">Image</label><img
+                                                    src="/proimg/{{ this._id }}.jpg" style="width:50px; height:50px;"
+                                                    alt=""><input type="file" name="image"></div>
+                                            <div class="input-group mb-3">
+                                                <div class="ml-auto col-xl-8 col-lg-8 col-md-8 col-sm-7 pl-0"><button
+                                                        type="submit" onclick="return validate()"
+                                                        class="btn btn-primary">Add </button></div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/each}}
+
+                        {{#each data}}
+                        <div class="modal fade" id="b{{this._id}}" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Add Offer</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="modal-body">
+
+                                        <form action="/admin/add-offer-to-product/{{this._id}}" method="post"
+                                            class="tm-edit-product-form">
+                                            <div class="input-group mb-3">
+                                                <select name="offerid" class="form-control " style="padding: 11px 18px"
+                                                    id="catagory">
+                                                    <option selected>Disabled</option>
+                                                    {{#each ../offer}}
+                                                    <option value="{{this._id}}">{{this.name}}</option>
+                                                    {{/each}}
+                                                </select>
+                                            </div>
+
+                                            <div class="input-group mb-3">
+                                                <div class="ml-auto col-xl-8 col-lg-8 col-md-8 col-sm-7 pl-0">
+                                                    <button type="submit" onclick="return advalidate()"
+                                                        class="btn btn-primary">Add
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+
+                                    <div class="modal-footer">
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        {{/each}}
+                    </div>
+                </div>
+
+
+                {{!-- offer table--}}
+                <div class="col-5">
+                    <div class="bg-light">
+                        <div class=" col-md-6 col-sm-12 text-right pt-2">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#a444"
+                                data-whatever="@mdo">Add Offers</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="usertable" class="table table-hover table-striped tm-table-striped-even mt-3">
+                                <thead>
+                                    <tr class="tm-bg-gray">
+                                        <th scope="col">No</th>
+                                        <th scope="col">Offer Name</th>
+                                        <th scope="col">Discount</th>
+                                        <th scope="col">Edit</th>
+                                    </tr>
+                                </thead>
+                                <tbody>{{#each offer}}
+                                    <tr>
+                                        <td class="text-center pt-3">{{inc @index}}</td>
+                                        <td class="tm-product-name pt-3">{{name}}</td>
+                                        <td class="text-center pt-3">{{percentage}}</td>
+                                        <td class="text-center pt-3"><a onclick="deleteOffer('{{this._id}}')"><i
+                                                    class="fas fa-trash-alt tm-trash-icon "></i></a></td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                        {{!-- add offer --}}
+                        <div class="modal fade" id="a444" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="/admin/add-offers" method="post" class="tm-edit-product-form">
+                                            <div class="input-group mb-3">
+                                                <label class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Offer
+                                                    Name</label>
+                                                <input name="name" type="text"
+                                                    class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
+                                                    id="addname" onkeyup="addNamevalidate()">
+                                            </div>
+                                            <div class="text-danger text-center" id="addnameerror"></div>
+                                            <div class="input-group mb-3">
+                                                <label for="expire_date"
+                                                    class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Discount
+                                                    percentage
+                                                </label>
+                                                <input id="perctentage" name="percentage" type="text"
+                                                    class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
+                                                    data-large-mode="true" onkeyup="addPercentagevalidate()">
+                                            </div>
+                                            <p class="text-danger text-center" id="addperctentageerror"></p>
+                                            <div class="input-group mb-3">
+                                                <div class="ml-auto col-xl-8 col-lg-8 col-md-8 col-sm-7 pl-0">
+                                                    <button type="submit" onclick="return addValidate()"
+                                                        class="btn btn-primary">Add
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        function addNamevalidate() {
+            let Name = document.getElementById('addname').value
+            let Nameerror = document.getElementById('addnameerror')
+            if (Name == "") {
+                Nameerror.innerHTML = "This Field Must Be Required!"
+                return false
+            }
+            Nameerror.innerHTML = ""
+            return true
+
+        }
+
+        function addDatevalidate() {
+            const Size = document.getElementById("addsize").value
+            const Sizeerror = document.getElementById("addsizeerror")
+            if (Size == "") {
+                Sizeerror.innerHTML = "This Field Must Be Required!"
+                return false
+            }
+            Sizeerror.innerHTML = ""
+            return true
+        }
+
+        function addPercentagevalidate() {
+            const Price = document.getElementById("perctentage").value
+            const Priceerror = document.getElementById("addperctentageerror")
+            if (Price == "") {
+                Priceerror.innerHTML = "This Field Must Be Required!"
+                return false
+            }
+            if (!Price.match(/[0-9]/)) {
+                Priceerror.innerHTML = "Only Numbers Are Allowed"
+                return false
+            }
+            Priceerror.innerHTML = ""
+            return true
+        }
+
+
+
+        function addValidate() {
+            if (addNamevalidate() && addPerctentagevalidate()) {
+                return true
+            }
+            return false
+        }
+    </script>
+</body>

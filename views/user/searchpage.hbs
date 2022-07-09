@@ -1,0 +1,89 @@
+<div class="container  mt-5 pt-5 mb-5">
+	<hr>
+	{{#if products}}
+	<div class="row">
+		<div class="col-xl-3 col-lg-4 col-md-5">
+			<div class="sidebar-categories">
+				<div class="head">Browse Categories</div>
+				<ul class="main-categories">
+					<li class="main-nav-list"><a href="/shopcategory/all">All</a></li>
+					{{#each category}}
+					<li class="main-nav-list"><a href="/shopcategory/{{this.name}}">{{this.name}}</a></li>
+					{{/each}}
+				</ul>
+			</div>
+		</div>
+		<div class="col-xl-9 col-lg-8 col-md-7">
+			<!-- Start Filter Bar -->
+			<div class="filter-bar d-flex flex-wrap align-items-center">
+				<div class="sorting">
+				</div>
+				<div class="sorting mr-auto">
+				</div>
+				<div class="pagination">
+				</div>
+			</div>
+			<section class="lattest-product-area pb-40 category-list">
+				<div class="row">
+					{{#each products}}
+					<div class="col-lg-4 col-md-6">
+						<div class="single-product">
+							<img class="img-fluid" style="width: 250px; height: 250px;" src="/proimg/{{this._id}}.jpg"
+								alt="">
+							<div class="product-details">
+								<h6 style="height: 30px;">{{this.name}}</h6>
+								<div class="price">
+									{{#if offerstatus}}
+									<h6 class="l-through">₹{{this.price}}</h6>
+									<h6 class="text-success">{{offerpercentage}}%Off</h6>
+									<h6>₹{{this.discountPrice}}</h6>
+									{{else}}
+									<h6>₹{{this.price}}</h6>
+									{{/if}}
+								</div>
+								<div class="prd-bottom">
+
+									<div class="social-info">
+										<button style="border: none; background-color: #ffff;"
+											onclick="addToCart('{{this._id}}')"><span style="height: 29px; width: 29px;"
+												class="ti-bag"></span></button>
+										<p class="hover-text">add to bag</p>
+									</div>
+									<div class="social-info ">
+										{{#if wishview}}
+										<button style="border: none; background-color: #ffff;"
+											onclick="addTowishlist('{{this._id}}')">
+											<span id="a{{this._id}}"
+												style="height: 29px; width: 29px;background-color:  #dc3545;"
+												class="lnr lnr-heart"></span>
+										</button>
+										{{else}}
+										<button style="border: none; background-color: #ffff;"
+											onclick="addTowishlist('{{this._id}}')">
+											<span id="a{{this._id}}"
+												style="height: 29px; width: 29px; background-color: #828bb2;"
+												class="lnr lnr-heart"></span>
+										</button>
+										{{/if}}
+										<p class="hover-text">Wishlist</p>
+									</div>
+									<a href="/product-detail/pp/{{this._id}}" class="social-info">
+										<button style="border: none; background-color: #ffff;"><span
+												style="height: 29px; width: 29px;" class="lnr lnr-move"></span></button>
+										<p class="hover-text">view more</p>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					{{/each}}
+				</div>
+			</section>
+		</div>
+		{{else}}
+		<div style="height:10rem;" class="d-flex justify-content-center">
+			<h3>No Result!</h3>
+		</div>
+		{{/if}}
+	</div>
+</div>

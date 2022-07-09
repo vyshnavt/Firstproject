@@ -5,5 +5,10 @@ module.exports={
     CARTDATA:'cart',
     ADMIN:'admin',
     ORDER:'order',
-    WISHLIST:'wishlist'
+    WISHLIST:'wishlist',
+    BANNER:'banner',
+    COMMINGSOON:'commingsoon',
+    OFFERS:'offer',
+    ADDRESS:'address',
+    COUPON:'coupon'
 }

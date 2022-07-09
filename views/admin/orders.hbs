@@ -1,40 +1,65 @@
-<section class="pt-4">
-    <table class="table" id="usertable">
-        <thead>
-            <tr>
-                <th scope="col">No</th>
-                <th scope="col">Products</th>
-                <th scope="col">UserName</th>
-                <th scope="col">Mobile</th>
-                <th scope="col">Amount</th>
-                <th scope="col">Date</th>
-                <th scope="col">Payment</th>
-                <th scope="col">Status</th>
-                <th scope="col">Option</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each data}}
-                <tr>
-                    <td scope="row" class="pt-4">{{inc @index}}</td>
-                    
-                    <td class="pt-4">{{#each product}}<div>{{name}}</div><hr>{{/each}}</td>
-                    {{#each prod}}
-                    <td class="pt-4">{{name}}</td>
-                    {{/each}}
-                    <td class="pt-4">{{deliveryDetails.mobile}}</td>
-                    <td class="pt-4">{{total}}</td>
-                    <td class="pt-4">{{date}}</td>
-                    <td class="pt-4">{{paymentMethod}}</td>
-                    <td class="pt-4">{{status}}</td>
-                    {{#if status}}
-                    <td class="" id="{{this._id}}"><a  class="btn btn-danger"  onclick="cancelOrder('{{this._id}}')">Cancel</a></td>
-                    {{/if}}
-                </tr>
-            {{/each}}
-        </tbody>
-    </table>
-    
-    
+<body class="bg02">
+    <section class="mt-5 p-3" style="background:#fff;">
+        <div class="table-responsive">
+            <table class="table" id="usertable">
+                <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Products</th>
+                        <th scope="col">UserName</th>
+                        <th scope="col">Mobile</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Payment</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Option</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each data}}
+                    <tr>
+                        <td scope="row" class="pt-4">{{inc @index}}</td>
 
-</section>
+                        <td class="pt-4">{{#each product}}<div>{{name}}</div>
+                            <hr>{{/each}}
+                        </td>
+                        {{#each prod}}
+                        <td class="pt-4">{{name}}</td>
+                        {{/each}}
+                        <td class="pt-4">{{deliveryDetails.mobile}}</td>
+                        <td class="pt-4">{{total}}</td>
+                        <td class="pt-4">{{date}}</td>
+                        <td class="pt-4">{{paymentMethod}}</td>
+                        <td class="pt-4">{{status}}</td>
+                        {{#ifCompare status "Cancelled"}}
+                        <td class="pt-4">Cancelled</td>
+                        {{else if status}}
+                        {{#ifCompare status "Shipped"}}
+                        <td class="pt-4"><select onchange="chanStatus(this.value,'{{this._id}}')">
+                            <option selected>{{this.status}}</option>
+                            <option value="Deliverd">Delivered</option>
+                            <option value="Cancelled">Cancel</option>
+                        </td>
+                        {{else}}
+                        {{#ifCompare status "Deliverd"}}
+                        <td class="pt-4">Deliverd</td>
+                        {{else}}
+                        {{!-- <td class="" id="{{this._id}}"><a class="btn btn-danger"
+                                onclick="cancelOrder('{{this._id}}')">Cancel</a></td> --}}
+                        <td class="pt-4"><select onchange="chanStatus(this.value,'{{this._id}}')">
+                                <option selected>{{this.status}}</option>
+                                <option value="Placed">Placed</option>
+                                <option value="Cancelled">Cancel</option>
+                                <option value="Shipped">Shipped</option>
+                                <option value="Deliverd">Delivered</option>
+                            </select></td>
+                        {{/ifCompare}}
+                        {{/ifCompare}}
+                        {{/ifCompare}}
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</body>

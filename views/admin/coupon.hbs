@@ -1,0 +1,155 @@
+<body id="reportsPage" class="bg02">
+    <div class="" id="home">
+        <div class="container">
+            <div class="row tm-content-row tm-mt-big " style="justify-content: center">
+                <div class="col-8 ">
+                    <div class="bg-light p-3">
+                        <div class=" col-md-6 col-sm-12 text-end pt-2">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#a444"
+                                data-whatever="@mdo">Add Coupon</button>
+
+                        </div>
+                        <div class="ml-3">
+                            {{#if already}}
+                            <p class="text-danger">{{already}}</p>
+                            {{/if}}
+                        </div>
+                        <div class="table-responsive">
+                            <table id="usertable" class="table table-hover table-striped tm-table-striped-even mt-3">
+                                <hr>
+                                <thead>
+                                    <tr class="tm-bg-gray">
+                                        <th scope="col">No</th>
+                                        <th scope="col">Coupon Name</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Expire Date</th>
+                                        <th scope="col">Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>{{#each coupon}}
+                                    <tr>
+                                        <td class=" pt-3">{{inc @index}}</td>
+                                        <td class="tm-product-name pt-3">{{name}}</td>
+                                        <td class="">{{price}}</td>
+                                        <td class="">{{expiredate}}</td>
+                                        <td class=""><a onclick="deleteCoupon('{{_id}}')"><i
+                                                    class="fas fa-trash-alt tm-trash-icon "></i></a></td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {{!-- add offer --}}
+                        <div class="modal fade" id="a444" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Add Coupon</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="/admin/add-coupon" method="post" class="tm-edit-product-form">
+                                            <div class="input-group mb-3">
+                                                <label class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Offer
+                                                    Name</label>
+                                                <input name="name" type="text"
+                                                    class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
+                                                    id="addname" onkeyup="Namevalidate()">
+                                            </div>
+                                            <div class="text-danger text-center" id="addnameerror"></div>
+                                            <div class="input-group mb-3">
+                                                <label for="expire_date"
+                                                    class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Price
+                                                </label>
+                                                <input id="price" name="price" type="text"
+                                                    class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
+                                                    data-large-mode="true" onkeyup="Pricevalidate()">
+                                            </div>
+                                            <div class="text-danger text-center" id="priceerror"></div>
+                                            <div class="input-group mb-3">
+                                                <label for="expire_date"
+                                                    class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Expire
+                                                    Date
+                                                </label>
+                                                <input id="expiredate" name="expiredate" type="date"
+                                                    class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7"
+                                                    data-large-mode="true" onkeyup="Expirevalidate()">
+                                            </div>
+
+                                            <p class="text-danger text-center" id="expiredateerror"></p>
+                                            <div class="input-group mb-3">
+                                                <div class="ml-auto col-xl-8 col-lg-8 col-md-8 col-sm-7 pl-0">
+                                                    <button type="submit" onclick="return validate()"
+                                                        class="btn btn-primary">Add
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        function Namevalidate() {
+            let Name = document.getElementById('addname').value
+            let Nameerror = document.getElementById('addnameerror')
+            if (Name == "") {
+                Nameerror.innerHTML = "This Field Must Be Required!"
+                return false
+            }
+            Nameerror.innerHTML = ""
+            return true
+
+        }
+
+        function Pricevalidate() {
+            const Price = document.getElementById("price").value
+            const Priceerror = document.getElementById("priceerror")
+            if (Price == "") {
+                Priceerror.innerHTML = "This Field Must Be Required!"
+                return false
+            }
+            if (!Price.match(/[0-9]/)) {
+                Priceerror.innerHTML = "Only Numbers Are Allowed"
+                return false
+            }
+            Priceerror.innerHTML = ""
+            return true
+        }
+
+        function Expirevalidate() {
+            const Date = document.getElementById("expiredate").value
+            const Dateeroor = document.getElementById("expiredateerror")
+            if (Date == "") {
+                Dateeroor.innerHTML = "This Field Must Be Required!"
+                return false
+            }
+
+            Dateeroor.innerHTML = ""
+            return true
+        }
+
+        function validate() {
+            if (Namevalidate() && Pricevalidate() && Expirevalidate()) {
+                return true
+            }
+            return false
+        }
+    </script>
+</body>
