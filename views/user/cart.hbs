@@ -3,54 +3,55 @@
     <div class="container pt-3">
 
         <div class="cart_inner">
-            <div class="table-responsive">
-                 {{#if cartproduct}}
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">
-                                <div>Product</div>
-                            </th>
-                            <th scope="col">
-                                <div class="ml-5">Price</div>
-                            </th>
-                            <th scope="col">
-                                <div class="ml-5">Quantity </div>
-                            </th>
-                            <th scope="col">
-                                <div class="ml-3">Total</div>
-                            </th>
-                            <th scope="col">
-                                <div class="ml-3">Offer</div>
-                            </th>
-                            <th scope="col">Option</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                       
-                        {{#each cartproduct}}
-                        <tr>
+            {{#if cartproduct}}
+            <div class="row d-none d-md-inline ">
+                <div class="d-flex">
+                    <div class="col-6 ml-2">
+                        <div>Product</div>
+                    </div>
+                    <div class="col-1 ml-2 ">
+                        <div >Price</div>
+                    </div>
+                    <div class="col-2">
+                        <div >Quantity </div>
+                    </div>
+                    <div class="col-1">
+                        <div >Total</div>
+                    </div>
+                    <div class="col-1">
+                         <div >Offer</div>
+                    </div>
+                    <div class="col-1">
+                         <div>Option</div>
+                    </div>
+                </div>
+                    
 
-                            <td>
-                                <div class="media ">
+                </div>
+            <hr>
+            {{#each cartproduct}}
+            <div class="row">
+                
+                <hr>
+                    <div class=" col-md-6">
+                        <div class="media ">
                                     <a href="/product-detail/pp/{{this.product._id}}">
                                         <div class="d-flex ">
                                             <img style="width:5rem;" src="/proimg/{{this.product._id}}.jpg" alt="">
                                         </div>
                                     </a>
-                                    <div class="media-body">
+                                    <div class="media-body ml-3 mt-4">
                                         <p>{{this.product.name}}</p>
                                     </div>
                                 </div>
-                            </td>
-                            <td>
-                                <div class="ml-5">
+                    </div>
+                    <div class="col-6 col-sm-2 col-md-1">
+                        <div class=" mt-4">
                                     <h5>₹{{this.product.price}}</h5>
                                 </div>
-                            </td>
-
-                            <td>
-                                <div class="product_count ml-5 ">
+                    </div>
+                    <div class="col-6 col-sm-3 col-md-2 mt-4">
+                        <div class="product_count">
                                     <input type="text" id="{{this.product._id}}" maxlength="12"
                                         value="{{this.quantity}}" class="input-text qty">
 
@@ -64,112 +65,88 @@
                                         class="reduced items-count" type="button"><i
                                             class="lnr lnr-chevron-down"></i></button>
                                 </div>
-                            </td>
-
-                            <td>
-                                <div class="ml-3">
-                                    <h5><span id="{{this.product.name}}"> ₹{{this.total}}</span></h5>
+                    </div>
+                    <div class="col-6 col-sm-2 col-md-1 mt-4">
+                        <div >
+                                    <div><h5><span id="{{this.product.name}}"> ₹{{this.total}}</span></h5></div>
                                 </div>
-                            </td>
-                            {{#if this.product.offer}}
-                            <td>
-                                <h5><span id="{{this.product.offer}}" class="text-success">
+                    </div>
+                    <div class="col-6 col-sm-2 col-md-1 mt-4">
+                        {{#if this.product.offer}}
+                         <div>
+                            <h5><span id="{{this.product.offer}}" class="text-success">
                                         {{this.product.offerpercentage}}%Off</span></h5>
-                            </td>
-                            {{else}}
-                            <td class=""><span></span></td>
-                            {{/if}}
-
-                            <td>
-
-                                <div> <a onclick="removeFromcart('{{this._id}}','{{this.product._id}}')"
+                         </div>
+                         {{else}}
+                         <div >
+                            <span></span>
+                         </div>
+                         {{/if}}
+                    </div>
+                    <div class="col-6 col-sm-3 col-md-1 mt-4">
+                         <div> <a onclick="removeFromcart('{{this._id}}','{{this.product._id}}')"
                                         class="btn btn-danger text-white">Remove</a></div>
-                            </td>
-                        </tr>
-
-                        {{/each}}
-                        <tr class="bottom_button">
-                            <td>
-                                <a class="gray_btn" href="#"></a>
-                            </td>
-                            <td>
-
-                            </td>
-                            <td>
-
-                            </td>
-                            <td>
-
-                            </td>
-                            <td>
-
-                            </td>
-                            <td>
-                                <form action="/apply-coupon" method="post">
-                                    <div class="cupon_text d-flex align-items-end px-2" style="margin-left: -243px">
-                                        <input type="text" style="color: black" name="couponname"
+                    </div>
+                </div>
+                <hr>
+                {{/each}}
+            <div class="row justify-content-end ">
+                    <div>
+                        <div class="d-flex justify-content-end " >
+                                    <form action="/apply-coupon" method="post">
+                                    <div class="cupon_text d-flex align-items-end px-2 cart_inner" >
+                                        <input type="text" style="color: black;height: 38px;margin-right: -1px;padding-left: 8px;border: 1px solid #eeeeee" name="couponname"
                                             placeholder="Coupon Code">
-                                        <button class="primary-btn" style="border:unset;" type="submit">Apply</button>
+                                        <button class="primary-btn" style="border:unset;border-radius: 0px;line-height: 38px" type="submit">Apply</button>
                                     </div>
                                 </form>
-                            </td>
-
-                        </tr>
-                    </tbody>
-
-
-                </table>
-                <td> {{#if coupon}}
-                    <div class="text-danger d-flex justify-content-end mx-3">{{coupon}}</div>
-                    {{/if}}
-                </td>
+                                
+                                </div>
+                    </div>
+                    
+                </div>
                 <hr>
-                <div class="row  mx-3 " style="justify-content: end;">
-                    <div>
+            <div class="row" style="justify-content: end;">
+                    <div class="col-md-4">
                         <ul style="font-size: 10px;">
                             <li class="mt-2">
-                                <div class="ml-5 px-5">
+                                <div class="d-flex justify-content-between">
+                                    <div class=" ml-5">
                                     <h6>Total</h6>
                                 </div>
-                            </li>
-                            <li class="mt-2">
-                                <div class="ml-5 px-5">
-                                    <h6>Offer Applied</h6>
-                                </div>
-                            </li>
-                            <li class="mt-2">
-                                <div class="ml-5 px-5">
-                                    <h6>Shipping Fee</h6>
-                                </div>
-                            </li>
-                            <li class="mt-2">
-                                <div class="ml-5 px-5">
-                                    <h6>Coupon Applied</h6>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div>
-                        <ul style="text-align: end">
-                            <li class="mt-2">
                                 <div class="ml-5">
                                     <h6><span id="total"> ₹{{total}}</span></h6>
                                 </div>
+                                </div>
                             </li>
                             <li class="mt-2">
-                                <div class="ml-5">
+                                <div class="d-flex justify-content-between">
+                                    <div class="ml-5 ">
+                                    <h6>Offer Applied</h6>
+                                </div>
+                                <div >
                                     <h6><span id="offertotal">- ₹{{offertotal}}</span></h6>
                                 </div>
-                            </li>
-                            <li class="mt-2">
-                                <div class="ml-5">
-                                    <h6><span id="total">₹0</span></h6>
                                 </div>
                             </li>
-
                             <li class="mt-2">
-                                <div class="ml-5">
+                                <div class="d-flex justify-content-between">
+                                    <div class="ml-5">
+                                    <h6>Shipping Fee</h6>
+                                </div>
+                                <div >
+                                    <h6><span id="total">₹0</span></h6>
+                                </div>
+                                </div>
+                            </li>
+                            <li class="mt-2">
+                                <div class="d-flex justify-content-between" >
+                                    <div class="ml-5 ">
+                                    <h6>Coupon Applied</h6>
+                                </div>
+                                <div>
                                     <h6><span id="coupon" class="">-₹{{couponval}}</span></h6>
+                                </div>
                                 </div>
                             </li>
                         </ul>
@@ -177,19 +154,25 @@
                 </div>
 
                 <hr>
-                <div class="d-flex justify-content-end mx-3">
-                    <span>
-                        <h6>Subtotal</h6>
-                    </span> <span class="ml-5">
-                        <h6><span>₹</span><span id="subtotal">{{subtotal}}</span></h6>
-                    </span>
+                <div class="row justify-content-end ">
+                    <div class="col-md-4">
+                        <div class="d-flex justify-content-between" >
+                                    <div class="ml-5 ">
+                                    <h6>Subtotal</h6>
+                                </div>
+                                <div class="ml-5 pe-2">
+                                    <h6><span id="subtotal"> ₹{{subtotal}}</span></h6>
+                                </div>
+                                
+                                </div>
+                    </div>
+                    
                 </div>
-            </div>
         </div>
         <hr>
         <div class="row justify-content-end mx-3">
 
-            <div class=" d-flex justify-content-end">
+            <div class=" d-flex justify-content-end text-center">
                 <a class="primary-btn px-5" style="border-radius: 3px;line-height: 45px" href="/checkout">Proceed to
                     checkout</a>
             </div>

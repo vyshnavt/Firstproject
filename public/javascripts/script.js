@@ -32,7 +32,7 @@ function addTowishlist(proId) {
             
             
                 $("#wishlistcount").html(count)
-                document.getElementById("a"+proId).style.backgroundColor = "rgb(225 68 64";
+                document.getElementById("a"+proId).style.backgroundColor = "rgb(225 68 64)";
                 document.getElementById("b"+proId).style.backgroundColor = "red";
            }
            else{

@@ -13,8 +13,8 @@ const AUID=process.env.AuthToken
 const async = require('hbs/lib/async');
 const userHelper = require('../helpers/user-helper');
 //const {json} = require('express');
-let client = require('twilio')(ASID,AUID)
-
+let client = require('twilio')(ASID, AUID)
+ 
 const paypal = require('paypal-rest-sdk');
 //const {getOrder} = require('../helpers/user-helper');
 
@@ -294,7 +294,7 @@ router.get('/otpverify', (req, res) => {
     res.render('user/otpverify', {num, error: req.session.errorotp})
     req.session.errorotp = false
 })
-
+ 
 router.post('/otpverify', verify, (req, res) => {
     var otp = req.body.otp;
     var number = req.session.mob;
