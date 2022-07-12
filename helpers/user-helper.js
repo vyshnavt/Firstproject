@@ -411,8 +411,8 @@ module.exports = {
                     "payment_method": "paypal"
                 },
                 "redirect_urls": {
-                    "return_url": "https://www.vyshnavt.com/success",
-                    "cancel_url": "https://www.vyshnavt.com/cancel"
+                    "return_url": "https://vyshnavt.com:3000/success",
+                    "cancel_url": "https://vyshnavt.com:3000/cancel"
                 },
                 "transactions": [
                     {
