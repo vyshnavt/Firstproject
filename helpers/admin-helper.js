@@ -1,8 +1,5 @@
-// const { reject, promise } = require('bcrypt/promises')
-// const { promise } = require('bcrypt/promises')
 const async = require('hbs/lib/async')
 const db = require('../config/connection');
-// const { PRODUCTDATA } = require('../config/constants');
 const constants = require('../config/constants')
 let objectid = require('mongodb').ObjectId
 
@@ -11,7 +8,7 @@ function toUpper(str) {
     return str.toLowerCase().split(' ').map(function (word) {
         return word[0].toUpperCase() + word.substr(1);
     }).join(' ');
-}
+}  
 
 module.exports = {
     checkAdmin: (adminadata) => {
@@ -33,6 +30,7 @@ module.exports = {
             }
         })
     },
+
     getUsers: () => {
         return new Promise(async (resolve, reject) => {
             let users = await db.get().collection(constants.USERDATA).find().toArray()
@@ -66,6 +64,8 @@ module.exports = {
                 }
             }).then((data) => {
                 resolve(data)
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -75,6 +75,8 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.get().collection(constants.USERDATA).deleteOne({_id: objectid(userid)}).then(() => {
                 resolve()
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -91,14 +93,16 @@ module.exports = {
                     $set: {
                         status: true
                     }
+                }).then(()=>{
+                    resolve(data.insertedId)
                 })
-                resolve(data.insertedId)
+            }).catch(() => {
+                reject()
             })
         })
     },
 
     getproducts: (skipno) => {
-        try {
             return new Promise((resolve, reject) => {
                 skipno = parseInt(skipno) * 9
                 if (skipno < 0) {
@@ -106,25 +110,11 @@ module.exports = {
                 }
                 db.get().collection(constants.PRODUCTDATA).find({status: true}).skip(skipno).limit(9).toArray().then((products) => {
                     resolve(products)
+                }).catch(() => {
+                    reject()
                 })
             })
-        } catch (e) {}
-
     },
-
-    // getProductpagination:(skipno)=>{
-    //     console.log("1233333333333333333333333333333331");
-    //     return new Promise(async(resolve,reject)=>{
-    //       let n=parseInt(skipno)*7
-    //       console.log(skipno);
-    //       let prod=await db.get().collection(constants.PRODUCTDATA).find().skip(n).limit(7).toArray()
-    //       console.log(prod);
-    //     //   let pro=await db.get().collection(constants.PRODUCTDATA).find().limit(4).toArray()
-    //     //   console.log("777777777777777");
-    //     //   console.log(pro);
-    //       resolve(prod)
-    //     })
-    // },
 
     getProductCount: () => {
         return new Promise(async (resolve, reject) => {
@@ -140,29 +130,22 @@ module.exports = {
         })
     },
 
-    getproduct: (productid) => {
-        return new Promise((resolve, reject) => {
-            db.get().collection(constants.PRODUCTDATA).findOne({_id: objectid(productid)}).then((data) => {
-                resolve(produtcs)
-            })
-
-        })
-    },
-
     editproduct: (checkname, productid) => {
         return new Promise((resolve, reject) => {
 
             if (checkname == "comming") {
                 db.get().collection(constants.COMMINGSOON).findOne({_id: objectid(productid)}).then((data) => {
                     resolve(data)
+                }).catch(() => {
+                    reject(error)
                 })
             } else {
                 db.get().collection(constants.PRODUCTDATA).findOne({_id: objectid(productid)}).then((data) => {
                     resolve(data)
+                }).catch(() => {
+                    reject(error)
                 })
             }
-        }).catch(() => {
-            reject(error)
         })
     },
 
@@ -183,6 +166,8 @@ module.exports = {
                 }
             }).then((data) => {
                 resolve(data)
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -191,6 +176,8 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.get().collection(constants.PRODUCTDATA).remove({_id: objectid(productid)}).then(() => {
                 resolve()
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -200,6 +187,8 @@ module.exports = {
             categorydata.name = toUpper(categorydata.name)
             db.get().collection(constants.CATEGORYDATA).insertOne(categorydata).then(() => {
                 resolve()
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -236,6 +225,8 @@ module.exports = {
                 }).then(() => {
                     resolve()
                 })
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -258,6 +249,8 @@ module.exports = {
                 }).then(() => {
                     resolve()
                 })
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -280,6 +273,8 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.get().collection(constants.CATEGORYDATA).findOne({_id: objectid(categoryid)}).then((data) => {
                 resolve(data)
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -299,6 +294,8 @@ module.exports = {
                     }
                 }).then((data) => {
                     resolve(data)
+                }).catch(() => {
+                    reject()
                 })
             }
         })
@@ -332,6 +329,8 @@ module.exports = {
                     }
                 }).then(() => {
                     resolve({status: true})
+                }).catch(() => {
+                    reject()
                 })
             } else {
                 resolve({status: false})
@@ -352,6 +351,8 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.get().collection(constants.ADMIN).deleteOne({_id: objectid(adminId)}).then(() => {
                 resolve()
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -366,6 +367,8 @@ module.exports = {
                 }
             }).then((data) => {
                 resolve(data)
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -380,6 +383,8 @@ module.exports = {
                 }
             }).then((data) => {
                 resolve(data)
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -395,20 +400,6 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
 
             let orderDetail = await db.get().collection(constants.ORDER).aggregate([
-                // {
-                //      $project:{
-                //         user:'$user',
-                //          item:'$products.item',
-                //          quanti:'$products.quantity',
-                //          status:'$status',
-                //          date:'$date',
-                //          deliveryDetails:'$deliveryDetails',
-                //          address:'$deliveryDetails.address',
-                //          mobile:'$mobile',
-                //          payment:'$paymentMethod',
-                //          total:'$total'
-                //      }
-                // },
                 {
                     $lookup: {
                         from: constants.PRODUCTDATA,
@@ -424,13 +415,6 @@ module.exports = {
                         as: 'prod'
                     }
                 }
-
-                // {
-                //      $project:{
-                //          item:1,quanti:1,status:1,prod:1,deliveryDetails:1,total:1,payment:1,address:1,mobile:1,date:1,product:1
-                //      }
-                // },
-
             ]).toArray()
             resolve(orderDetail)
 
@@ -448,6 +432,8 @@ module.exports = {
                 }
             }).then(() => {
                 resolve()
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -458,8 +444,10 @@ module.exports = {
             details.name = details.name.toUpperCase()
             details.price = parseInt(details.price)
             details.quantity = parseInt(details.quantity)
-            db.get().collection(constants.PRODUCTDATA).insertOne(details).then((data) => { // db.get().collection(constants.PRODUCTDATA).updateOne({_id:data.insertedId},{$set:{status:true}})
+            db.get().collection(constants.PRODUCTDATA).insertOne(details).then((data) => { 
                 resolve(data.insertedId)
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -473,8 +461,9 @@ module.exports = {
                     banner: "true"
                 }
             }).then((data) => {
-                console.log(data);
                 resolve()
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -503,6 +492,8 @@ module.exports = {
             }
             db.get().collection(constants.COMMINGSOON).insertOne(productdetail).then((data) => {
                 resolve(data.insertedId)
+            }).catch(() => {
+                reject()
             })
 
         })
@@ -542,6 +533,8 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.get().collection(constants.COMMINGSOON).remove({_id: objectid(productid)}).then(() => {
                 resolve()
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -553,6 +546,8 @@ module.exports = {
                 db.get().collection(constants.COMMINGSOON).remove({_id: objectid(productid)}).then(() => {
                     resolve()
                 })
+            }).catch(() => {
+               reject()
             })
         })
     },
@@ -563,6 +558,8 @@ module.exports = {
             offerdata.percentage = parseInt(offerdata.percentage)
             db.get().collection(constants.OFFERS).insertOne(offerdata).then(() => {
                 resolve()
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -575,6 +572,8 @@ module.exports = {
             } else {
                 db.get().collection(constants.OFFERS).deleteOne({_id: objectid(offerdata)}).then(() => {
                     resolve({status: true})
+                }).catch(() => {
+                    reject()
                 })
             }
 
@@ -585,6 +584,8 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.get().collection(constants.OFFERS).find().sort({_id: -1}).toArray().then((data) => {
                 resolve(data)
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -609,6 +610,8 @@ module.exports = {
                 }
             }).then((data) => {
                 resolve(data)
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -626,6 +629,8 @@ module.exports = {
                 }
             }).then((data) => {
                 resolve()
+            }).catch(() => {
+               reject()
             })
         })
     },
@@ -693,6 +698,8 @@ module.exports = {
             } else {
                 db.get().collection(constants.COUPON).insertOne(couponData).then(() => {
                     resolve({status: true})
+                }).catch(() => {
+                    reject()
                 })
             }
 
@@ -703,6 +710,8 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.get().collection(constants.COUPON).find().sort({_id: -1}).toArray().then((data) => {
                 resolve(data)
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -711,6 +720,8 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.get().collection(constants.COUPON).deleteOne({_id: objectid(couponId)}).then(() => {
                 resolve()
+            }).catch(() => {
+                reject()
             })
         })
     },

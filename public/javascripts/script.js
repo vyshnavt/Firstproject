@@ -1,6 +1,5 @@
 
 function addToCart(proId) {
-console.log("777777777777777777");
     $.ajax({
         url: '/add-tocart/' + proId,
         method: 'get',
@@ -23,21 +22,17 @@ function addTowishlist(proId) {
         url: '/add-wishlist/'+proId,
         method: 'get',
         success: (response) => {
-            console.log(response);
             let count = $('#wishlistcount').html()
            if(response.login){
             location.href='/login'
            }else if(response.status){
             count = parseInt(count) + 1
-            
-            
                 $("#wishlistcount").html(count)
                 document.getElementById("a"+proId).style.backgroundColor = "rgb(225 68 64)";
                 document.getElementById("b"+proId).style.backgroundColor = "red";
            }
            else{
             count = parseInt(count) - 1
-            
                 $("#wishlistcount").html(count)
                 document.getElementById("a"+proId).style.backgroundColor = "#828bb2"
            }

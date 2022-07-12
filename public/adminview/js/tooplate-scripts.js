@@ -46,17 +46,17 @@ function drawLineChart(jan, feb, Mar, apr, may, jun, jul,aug,sep,oct,nov,dec) {
             lineTension: 0.1
           },
           {
-            label: "Popular Hits",
-            data: [33, 45, 37, 21, 55, 74, 69],
+            label: "",
+            data: [],
             fill: false,
-            borderColor: "rgba(255,99,132,1)",
+            borderColor: "",
             lineTension: 0.1
           },
           {
-            label: "Featured",
-            data: [44, 19, 38, 46, 85, 66, 79],
+            label: "",
+            data: [],
             fill: false,
-            borderColor: "rgba(153, 102, 255, 1)",
+            borderColor: "",
             lineTension: 0.1
           }
         ]

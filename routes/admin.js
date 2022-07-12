@@ -1,14 +1,12 @@
 var express = require('express');
 const async = require('hbs/lib/async');
-const {Db} = require('mongodb');
+//const {Db} = require('mongodb');
 const adminHelper = require('../helpers/admin-helper');
 var router = express.Router();
 var adminhelper = require('../helpers/admin-helper');
 const userHelper = require('../helpers/user-helper');
 let fs = require('fs');
 
-
-/* GET users listing. */
 const verify = (req, res, next) => {
     if (req.session.adminlogedin) {
         next()
@@ -33,7 +31,6 @@ router.get('/', (req, res) => {
 const homecontroller = async function (req, res, next) {
     let monthreport = await adminHelper.getMonthlyReport()
     adminHelper.getReportPayment().then((report) => {
-        console.log(monthreport);
         let monarray = []
         let a = 0;
         for (let i = 1; i <= 12; i++) {
@@ -48,11 +45,13 @@ const homecontroller = async function (req, res, next) {
                 monarray[i - 1] = 0
             }
         }
+        console.log(monthreport);
+        console.log(monarray);
 
         let [...monarra] = monarray
-        paypal = 0
-        razor = 0
-        cod = 0
+        let paypal = 0
+        let razor = 0
+        let cod = 0
         for (let i of report) {
             if (i._id == 'paypal') {
                 paypal = i.total
@@ -93,15 +92,6 @@ router.post('/index', function (req, res, next) {
     res.redirect('/admin')
     }
     })
-    // console.log(req.body);
-    // if (req.body.name == "" && req.body.password == "") {
-    //     req.session.adminlogedin = true;
-    //     req.body.adminlog = true;
-    //     res.redirect('/admin/index')
-    // } else {
-    //     req.session.adminvalue = "Invalid  Admin name or password"
-    //     res.redirect('/admin')
-    // }
 });
 
 router.get('/products', verify, async function (req, res, next) {
@@ -122,7 +112,6 @@ router.get('/add-product', verify, function (req, res, next) {
 });
 
 router.post('/add-product', function (req, res) {
-
     adminhelper.addProduct(req.body).then((data) => {
         let image = req.files.image
         image.mv('./public/proimg/' + data + '.jpg', (err, data) => {
@@ -132,6 +121,8 @@ router.post('/add-product', function (req, res) {
                 res.redirect('/admin/products')
             }
         })
+    }).catch(() => {
+        res.redirect('/error')
     })
 });
 
@@ -147,11 +138,10 @@ router.get('/edit-product/:id', verify, async (req, res, next) => {
 });
 
 router.post('/update-product/:id', (req, res, next) => {
-    let productid = req.params.id
-    adminHelper.updateproduct(productid, req.body).then((data) => {
+    adminHelper.updateproduct(req.params.id, req.body).then((data) => {
         if (req.files != null) {
             let image = req.files.image;
-            image.mv('./public/proimg/' + productid + '.jpg')
+            image.mv('./public/proimg/' + req.params.id + '.jpg')
             res.redirect('/admin/products')
         } else {
             res.redirect('/admin/products')
@@ -163,6 +153,8 @@ router.post('/update-product/:id', (req, res, next) => {
 router.get('/delete-product/:id', verify, (req, res, next) => {
     adminHelper.deleteproduct(req.params.id).then(() => {
         res.json({status: true})
+    }).catch(() => {
+        res.redirect('/error')
     })
 
 });
@@ -185,12 +177,16 @@ router.get('/block-user/:id', verify, function (req, res) {
     adminhelper.blockuser(userid).then((data) => {
         res.json({status: true})
 
+    }).catch(() => {
+        res.redirect('/error')
     })
 });
 
 router.get('/unblock-user/:id', verify, function (req, res) {
     adminhelper.Unblockuser(req.params.id).then((data) => {
         res.json({status: true})
+    }).catch(() => {
+        res.redirect('/error')
     })
 });
 
@@ -201,6 +197,8 @@ router.get('/delete-user/:id', verify, function (req, res) {
     }
     adminhelper.deleteuser(req.params.id).then(() => {
         res.json({status: true})
+    }).catch(() => {
+        res.redirect('/error')
     })
 });
 
@@ -216,10 +214,6 @@ router.get('/category', verify, function (req, res) {
     })
 });
 
-// router.get('/add-category',verify, function(req, res) {
-// res.json({status:true})
-// });
-
 router.post('/add-category', function (req, res) {
     adminHelper.CheckCategory(req.body).then((check) => {
         if (check.status) {
@@ -227,6 +221,8 @@ router.post('/add-category', function (req, res) {
         } else {
             adminHelper.addCategory(req.body).then(() => { 
                 res.json({status: true})
+            }).catch(() => {
+                res.redirect('/error')
             })
         }
     })
@@ -239,18 +235,24 @@ router.get('/edit-category/:id', verify, function (req, res) {
             data,
             super: req.session.super
         })
+    }).catch(() => {
+        res.redirect('/error')
     })
 });
 
 router.get('/block-category/:id/:idc', verify, function (req, res) {
     adminHelper.blockCategory(req.params.id, req.params.idc).then(() => {
         res.json({status: true})
+    }).catch(() => {
+        res.redirect('/error')
     })
 });
 
 router.get('/unblock-category/:id/:idc', verify, function (req, res) {
     adminHelper.unblockCategory(req.params.id, req.params.idc).then(() => {
         res.json({status: true})
+    }).catch(() => {
+        res.redirect('/error')
     })
 });
 
@@ -262,6 +264,8 @@ router.post('/edit-category/:id', verify, function (req, res) {
         } else {
             res.redirect('/admin/category')
         }
+    }).catch(() => {
+        res.redirect('/error')
     })
 });
 
@@ -297,24 +301,32 @@ router.post('/edit-admin/:id', (req, res) => {
             req.session.addadmin = "Admin Already Existed!"
             res.redirect('/admin/admins')
         }
+    }).catch(() => {
+        res.redirect('/error')
     })
 })
 
 router.get('/delete-admin/:id', verify, (req, res) => {
     adminHelper.deleteAdmin(req.params.id).then(() => {
         res.json({status: true})
+    }).catch(() => {
+        res.redirect('/error')
     })
 })
 
 router.post('/block-admin/:id', (req, res) => {
     adminHelper.blockAdmin(req.params.id).then((responce) => {
         res.json(responce)
+    }).catch(() => {
+        res.redirect('/error')
     })
 })
 
 router.get('/unblock-admin/:id', verify, (req, res) => {
     adminHelper.unblockAdmin(req.params.id).then((responce) => {
         res.json(responce)
+    }).catch(() => {
+        res.redirect('/error')
     })
 })
 
@@ -332,6 +344,8 @@ router.get('/orders', verify, (req, res) => {
 router.post('/change-status', (req, res) => {
     adminHelper.changeOrderstatus(req.body).then((data) => {
         res.json({status: true})
+    }).catch(() => {
+        res.redirect('/error')
     })
 })
 
@@ -345,12 +359,16 @@ router.post('/add-banner', verify, (req, res) => {
                 res.redirect('/admin/banner')
             }
         })
+    }).catch(() => {
+        res.redirect('/error')
     })
 })
 
 router.get('/remove-from-banner/:id', verify, (req, res) => {
     adminHelper.RemoveFromBanner(req.params.id).then(() => {
         res.json({status: true})
+    }).catch(() => {
+        res.redirect('/error')
     })
 })
 
@@ -377,7 +395,9 @@ router.post('/add-commingsoon', verify, (req, res) => {
               res.redirect('/admin/commingsoon')
           }
       })
-  })
+  }).catch(() => {
+    res.redirect('/error')
+})
 })
 
 
@@ -395,7 +415,7 @@ router.post('/update-Comming-product/:id', verify, (req, res) => {
         }
         res.redirect('/admin/commingsoon')
     }).catch(() => {
-        res.render('user/pagenotfound')
+        res.redirect('/error')
     })
 })
 
@@ -415,6 +435,8 @@ router.get('/delete-comming-product/:id', verify, (req, res, next) => {
     let productid = req.params.id
     adminHelper.deleteCommingproduct(productid).then(() => {
         res.json({status: true})
+    }).catch(() => {
+        res.redirect('/error')
     })
 
 });
@@ -422,6 +444,8 @@ router.get('/delete-comming-product/:id', verify, (req, res, next) => {
 router.get('/move-comming-products/:id', verify, (req, res, next) => {
     adminHelper.moveCommingproduct(req.params.id).then((data) => {
         res.redirect('/admin/commingsoon')
+    }).catch(() => {
+        res.redirect('/error')
     })
 });
 
@@ -431,9 +455,12 @@ router.get('/offers', verify, async (req, res) => {
             res.render('admin/offers', {
                 admin: true,
                 data,
-                offer
+                offer,
+                super: req.session.super
             })
         })
+    }).catch(() => {
+        res.redirect('/error')
     })
 
 })
@@ -441,6 +468,8 @@ router.get('/offers', verify, async (req, res) => {
 router.post('/add-offers', (req, res) => {
     adminHelper.addOffers(req.body).then(() => {
         res.redirect('/admin/offers')
+    }).catch(() => {
+        res.redirect('/error')
     })
 })
 
@@ -452,18 +481,24 @@ router.get('/delete-offer/:id', verify, (req, res) => {
             res.json({status: false})
         }
 
+    }).catch(() => {
+        res.redirect('/error')
     })
 })
 
 router.post('/add-offer-to-product/:pid', (req, res) => {
     adminHelper.addOfferToProduct(req.params.pid, req.body).then(() => {
         res.redirect('/admin/offers')
+    }).catch(() => {
+        res.redirect('/error')
     })
 })
 
 router.get('/remove-offer-product/:id', verify, (req, res) => {
     adminHelper.removeOfferFromProduct(req.params.id).then(() => {
         res.json({status: true})
+    }).catch(() => {
+        res.redirect('/error')
     })
 })
 
@@ -476,9 +511,12 @@ router.get('/coupon', verify, async (req, res) => {
         res.render('admin/coupon', {
             admin: true,
             coupon,
-            already: req.session.coupon
+            already: req.session.coupon,
+            super: req.session.super
         })
         req.session.coupon = false
+    }).catch(() => {
+        res.redirect('/error')
     })
 })
 
@@ -491,12 +529,16 @@ router.post('/add-coupon', (req, res) => {
             res.redirect('/admin/coupon')
         }
 
+    }).catch(() => {
+        res.redirect('/error')
     })
 })
 
 router.get('/delete-coupon/:id', (req, res) => {
     adminHelper.removeCoupon(req.params.id).then(() => {
         res.redirect('/admin/coupon')
+    }).catch(() => {
+        res.redirect('/error')
     })
 })
 
@@ -504,7 +546,8 @@ router.get('/report', verify, (req, res) => {
     res.render('admin/report', {
         admin: true,
         data: req.session.report,
-        reporttotal: req.session.reporttotal
+        reporttotal: req.session.reporttotal,
+        super: req.session.super
     })
 })
 

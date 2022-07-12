@@ -3,11 +3,8 @@ const constants = require('../config/constants')
 const bcrypt = require('bcrypt')
 const async = require('hbs/lib/async')
 let objectid = require('mongodb').ObjectId
-// const { reject, promise } = require('bcrypt/promises')
 const Razorpay = require('razorpay');
 const paypal = require('paypal-rest-sdk');
-const {resolve} = require('path')
-// const { options } = require('../routes/user')
 var instance = new Razorpay({key_id: 'rzp_test_5uPpdrMxeSFhjj', key_secret: '31x9YumqgWID2IKajNcbZUQe'});
 
 function toUpper(str) {
@@ -23,8 +20,8 @@ paypal.configure({
 });
 
 module.exports = {
-    usersignup: (userdata) => {
 
+    usersignup: (userdata) => {
         return new Promise(async (resolve, reject) => {
             userdata.password = await bcrypt.hash(userdata.password, 10)
             userdata.repassword = await bcrypt.hash(userdata.repassword, 10)
@@ -37,9 +34,9 @@ module.exports = {
                     }
                 })
                 resolve()
+            }).catch(() => {
+                reject()
             })
-        }).catch(() => {
-            reject()
         })
     },
 
@@ -58,13 +55,13 @@ module.exports = {
                         responce.status = false
                         resolve(responce)
                     }
+                }).catch(() => {
+                    reject()
                 })
             } else {
                 responce.status = false
                 resolve(responce)
             }
-        }).catch(() => {
-            reject()
         })
     },
 
@@ -79,8 +76,6 @@ module.exports = {
                 check.status = false
                 resolve(check)
             }
-        }).catch(() => {
-            reject()
         })
     },
 
@@ -124,10 +119,10 @@ module.exports = {
                 }
                 db.get().collection(constants.CARTDATA).insertOne(cartobj).then(() => {
                     resolve({status: true})
+                }).catch(() => {
+                    reject()
                 })
             }
-        }).catch(() => {
-            reject()
         })
     },
 
@@ -211,8 +206,6 @@ module.exports = {
                 count = 0;
                 resolve(count)
             }
-        }).catch(() => {
-            reject()
         })
     },
 
@@ -242,11 +235,11 @@ module.exports = {
                     }
                 }).then((res) => {
                     resolve({status: true})
+                }).catch(() => {
+                    reject()
                 })
             }
 
-        }).catch(() => {
-            reject()
         })
     },
 
@@ -319,8 +312,6 @@ module.exports = {
                 resolve(total[0].total)
             }
 
-        }).catch(() => {
-            reject()
         })
     },
 
@@ -420,8 +411,8 @@ module.exports = {
                     "payment_method": "paypal"
                 },
                 "redirect_urls": {
-                    "return_url": "http://localhost:3000/success",
-                    "cancel_url": "http://localhost:3000/cancel"
+                    "return_url": "https://www.vyshnavt.com/success",
+                    "cancel_url": "https://www.vyshnavt.com/cancel"
                 },
                 "transactions": [
                     {
@@ -471,7 +462,9 @@ module.exports = {
                 }
             }).then(() => {
                 resolve()
-            }).catch(() => {})
+            }).catch(() => {
+                reject()
+            })
         })
     },
 
@@ -553,6 +546,8 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.get().collection(constants.ORDER).findOne({_id: objectid(orderId)}).then((data) => {
                 resolve(data)
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -614,10 +609,10 @@ module.exports = {
                 let k = 0
                 for (j of i.product) {
                     j.quantity = i.quanti[k]
-                }
+                } 
             }
             resolve(orderDetail)
-        })
+        }) 
     },
 
     Updatepassword: (userId, changeData) => {
@@ -629,10 +624,12 @@ module.exports = {
                         _id: objectid(userId)
                     }, {
                         $set: {
-                            password: changeData.newPassword
+                            password: changeData.newPassword  
                         }
                     }).then(() => {
                         resolve({status: true})
+                    }).catch(() => {
+                        reject()
                     })
                 } else {
                     resolve({sataus: false})
@@ -686,6 +683,8 @@ module.exports = {
                         }
                     }).then(() => {
                         resolve({status: false})
+                    }).catch(() => {
+                        reject()
                     })
                 }
             } else {
@@ -695,6 +694,8 @@ module.exports = {
                 }
                 db.get().collection(constants.WISHLIST).insertOne(wishdata).then(() => {
                     resolve({status: true})
+                }).catch(() => {
+                    reject()
                 })
             }
 
@@ -705,6 +706,8 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.get().collection(constants.WISHLIST).findOne({user: objectid(userId)}).then((data) => {
                 resolve(data)
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -754,6 +757,8 @@ module.exports = {
                 }
             }).then((data) => {
                 resolve()
+            }).catch(() => {
+                reject()
             })
         })
 
@@ -785,6 +790,8 @@ module.exports = {
             details.name = toUpper(details.name)
             db.get().collection(constants.ADDRESS).insertOne(details).then(() => {
                 resolve()
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -796,6 +803,8 @@ module.exports = {
                 _id: objectid(addressId)
             }, details).then(() => {
                 resolve()
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -804,6 +813,8 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             db.get().collection(constants.ADDRESS).deleteOne({_id: objectid(addressId)}).then(() => {
                 resolve()
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -823,6 +834,8 @@ module.exports = {
 
             db.get().collection(constants.ADDRESS).insertOne(address).then(() => {
                 resolve()
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -831,6 +844,8 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.get().collection(constants.ADDRESS).find({user: userId}).toArray().then((data) => {
                 resolve(data)
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -839,6 +854,8 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.get().collection(constants.ADDRESS).findOne({_id: objectid(addressId)}).then((data) => {
                 resolve(data)
+            }).catch(() => {
+                reject()
             })
         })
     },
@@ -865,7 +882,9 @@ module.exports = {
                         db.get().collection(constants.CARTDATA).updateOne({user:objectid(userId)}, {$set:{coupon:coupon.price, couponid:couponId}}).then((data)=> {
                             coupRes.value = coupon.price 
                             resolve(coupRes)
-                        }) 
+                        }).catch(() => {
+                            reject()
+                        })
                         
                     }
                 } else {
@@ -888,6 +907,8 @@ addCouponTouser : (userId, couponId) => {
                 }
             }).then(() => {
                 resolve()
+            }).catch(() => {
+                reject()
             })
         } else {
             let coupon = [couponId]

@@ -8,15 +8,10 @@ require('dotenv').config()
 const SSID=process.env.ServiceId
 const ASID=process.env.AccountSID
 const AUID=process.env.AuthToken
-// const {Db} = require('mongodb');
-// const {cartCount} = require('../helpers/user-helper');
 const async = require('hbs/lib/async');
 const userHelper = require('../helpers/user-helper');
-//const {json} = require('express');
 let client = require('twilio')(ASID, AUID)
- 
 const paypal = require('paypal-rest-sdk');
-//const {getOrder} = require('../helpers/user-helper');
 
 
 paypal.configure({
@@ -26,7 +21,6 @@ paypal.configure({
 });
 
 let verifyuser = (req, res, next) => {
-
     if (req.session.loggedin) {
         next()
     } else {
@@ -59,19 +53,18 @@ let carCount = async (req, res, next) => {
 router.get('/', async function (req, res, next) {
     let bannerproducts = await adminHelper.getBanner()
     let banner = await userHelper.getBanner()
-    bannerproducts = bannerproducts.slice(1)
+     bannerproducts = bannerproducts.slice(1)
     let commingProducts = await adminHelper.getCommingsoon()
     if (req.session.loggedin) {
         let user = req.session.user
         let wishview = await userHelper.getWishlistcheck(req.session.user._id)
         let cartcount = await userhelper.cartCount(req.session.user._id)
         let wishlistcount = await userHelper.getWhishlistCount(req.session.user._id)
-        console.log(wishview);
         adminHelper.getproducts().then((product) => {
             products = product.slice(0, 8)
             if(wishview){
             let k = 0
-            for (i of products) {
+            for (i of products) { 
                 let a = i._id.toString()
                 for (j of wishview.products) {
                     let b = j.toString()
@@ -111,23 +104,6 @@ router.get('/', async function (req, res, next) {
         })
     }
 });
-
-// router.get('/shopcatego',async(req,res)=>{
-// let catproducts=await adminHelper.getproducts()
-// req.session.CategoryProducts=catproducts
-// res.redirect('/shop')
-// })
-// router.get('/pagination/:id',async(req,res)=>{
-//     console.log(req.params.id);
-//     let n=parseInt(req.params.id)
-//     console.log(n);
-//     let m=12
-//      userHelper.getProductpagination(req.params.id).then((products)=>{
-//         console.log("222525252");
-//         res.render('user/category',{products,value:true,m})
-//     })
-// })
-
 
 router.get('/shopcategory/:name/:num', carCount, async (req, res) => {
     try {
@@ -178,13 +154,6 @@ router.get('/shopcategory/:name/:num', carCount, async (req, res) => {
     }
 })
 
-
-// router.get('/shopcateg',async(req,res)=>{
-// let catproducts=await userhelper.getCategoryProducts(req.params.name)
-// req.session.CategoryProducts=catproducts
-// res.redirect('/shop')
-// })
-
 router.get('/contact', carCount, (req, res) => {
     if (req.session.loggedin) {
         adminHelper.getCartoffersum(req.session.user._id)
@@ -213,6 +182,8 @@ router.get('/add-wishlist/:id', carCount, async (req, res) => {
     if (req.session.loggedin) {
         userhelper.addTowishlist(req.session.user._id, req.params.id).then((data) => {
             res.json(data)
+        }).catch(() => {
+           res.redirect("/error")
         })
     } else {
         loguser = {
@@ -226,11 +197,12 @@ router.get('/add-wishlist/:id', carCount, async (req, res) => {
 router.get('/remove-wishlist/:id', verifyuser, carCount, async (req, res) => {
     userhelper.removeFromwishlist(req.session.user._id, req.params.id).then(() => {
         res.json({status: true})
+    }).catch(() => {
+        res.redirect("/error")
     })
 })
 
 router.get('/login', verify, (req, res) => {
-    console.log("jjjj");
     res.render('user/login', {
         login: true,
         variable: req.session.variable
@@ -274,17 +246,14 @@ router.post('/signup', (req, res) => {
         if (responce.status) {
             req.session.variable = "email already existed"
             res.redirect('/signup')
-        } else { // userhelper.usersignup(req.body).then((responce) => {
+        } else {
             var number = req.body.mobile
             req.session.mob = req.body.mobile
             req.session.userdata = req.body
             client.verify.services(SSID).verifications.create({to: `+91${number}`, channel: "sms"}).then((data) => {
                 res.redirect('/otpverify')
-                // })
             })
         }
-    }).catch(() => {
-        res.redirect('/error')
     })
 })
 
@@ -301,7 +270,6 @@ router.post('/otpverify', verify, (req, res) => {
     client.verify.services(SSID).verificationChecks.create({to: `+91${number}`, code: otp}).then((data) => {
         if (data.status == "approved") {
             userhelper.usersignup(req.session.userdata).then(() => {
-                console.log("121212");
                 res.redirect("/login");
             }).catch(() => {
                 res.redirect('/error')
@@ -344,26 +312,6 @@ router.get('/checkout', verifyuser, async (req, res) => {
     }
 })
 
-// router.get('/product-detail/:id', carCount, (req, res) => {
-//     //if (req.session.user) {
-//         adminHelper.editproduct(req.params.id).then((product) => {
-//             res.render('user/product-detail', {
-//                 product,
-//                 cartcount: req.session.count,
-//                 user: true
-//             })
-//         }).catch((error)=>{
-//             res.render('user/pagenotfound')
-//         })
-//     // } else {
-//     //     adminHelper.editproduct(req.params.id).then((product) => {
-//     //         res.render('user/product-detail', {product, cartcount: req.session.count})
-//     //     }).catch((error)=>{
-//     //         res.render('user/pagenotfound')
-//     //     })
-//     // }
-// })
-
 router.get('/product-detail/:id/:id1', carCount, (req, res) => {
     if (req.params.id == "comming") {
         detail = false
@@ -388,7 +336,7 @@ router.get('/add-tocart/:id', (req, res) => {
         userhelper.addTocart(req.session.user._id, req.params.id).then((data) => {
             res.json(data)
         }).catch(() => {
-            res.redirect('error')
+            res.redirect('/error')
         })
     } else {
         let login = {
@@ -405,7 +353,6 @@ router.get('/cart', verifyuser, carCount, async (req, res) => {
         let couponval = 0
         if (cartcoupon) {
             couponval = cartcoupon.coupon
-            console.log("kkkkkkkkkkkkkkkkk");
         }
         let total = await userhelper.getTotalAmount(req.session.user._id)
         let offertotal = await adminHelper.getCartoffersum(req.session.user._id)
@@ -436,7 +383,7 @@ router.post('/change-product-quantity', (req, res) => {
         response.coupon = cart.coupon
         res.json(response)
     }).catch(() => {
-        res.redirect('error')
+        res.redirect('/error')
     })
 })
 
@@ -512,7 +459,6 @@ router.get('/success', async (req, res) => {
         if (error) {
             throw error;
         } else {
-            console.log(JSON.stringify(payment));
             userHelper.changePayementStatus(req.session.orderid).then(() => {
                 res.redirect('/conformation/' + req.session.orderid)
             }).catch(() => {
@@ -574,6 +520,8 @@ router.get('/user-profile', verifyuser, carCount, (req, res) => {
             wishlistcount: req.session.wishcount,
             cartcount: req.session.count
         })
+    }).catch(() => {
+        res.redirect('/error')
     })
 
 })
@@ -586,6 +534,8 @@ router.post('/change-password', (req, res) => {
             res.json({status: false})
 
         }
+    }).catch(() => {
+        res.redirect('/error')
     })
 })
 
@@ -598,18 +548,24 @@ router.get('/cancel-order/:id', verifyuser, (req, res) => {
 router.post('/add-address', (req, res) => {
     userHelper.addAddress(req.body).then(() => {
         res.redirect('/user-profile')
+    }).catch(() => {
+        res.redirect('/error')
     })
 })
 
 router.post('/edit-address/:id', (req, res) => {
     userHelper.updateAddress(req.body, req.params.id).then(() => {
         res.redirect('/user-profile')
+    }).catch(() => {
+        reject()
     })
 })
 
 router.get('/delete-address/:id', (req, res) => {
     userHelper.deleteAddress(req.params.id).then(() => {
         res.json({status: true})
+    }).catch(() => {
+        res.redirect('/error')
     })
 })
 
@@ -630,6 +586,8 @@ router.post('/apply-coupon', (req, res) => {
         } else {
             res.redirect('/cart')
         }
+    }).catch(() => {
+        res.redirect('/error')
     })
 
 })
@@ -639,7 +597,7 @@ router.post('/search', (req, res) => {
         req.session.searchdata = data
         res.redirect('/search')
     }).then(() => {
-        res.render('error')
+        res.redirect('/error')
     })
 })
 
