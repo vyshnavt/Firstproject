@@ -29,7 +29,9 @@ router.get('/', (req, res) => {
 })
 
 const homecontroller = async function (req, res, next) {
+    let dayreport= await adminHelper.getDailyReport()
     let monthreport = await adminHelper.getMonthlyReport()
+    console.log(monthreport);
     adminHelper.getReportPayment().then((report) => {
         let monarray = []
         let a = 0;
@@ -45,7 +47,7 @@ const homecontroller = async function (req, res, next) {
                 monarray[i - 1] = 0
             }
         }
-        console.log(monthreport);
+        
         console.log(monarray);
 
         let [...monarra] = monarray

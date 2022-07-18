@@ -170,9 +170,7 @@ module.exports = {
                         quantity: 1,
                         product: 1,
                         total: {
-                            $sum: {
                                 $multiply: ['$quantity', '$product.price']
-                            }
                         }
                     }
 
@@ -411,8 +409,8 @@ module.exports = {
                     "payment_method": "paypal"
                 },
                 "redirect_urls": {
-                    "return_url": "https://vyshnavt.com:3000/success",
-                    "cancel_url": "https://vyshnavt.com:3000/cancel"
+                    "return_url": "http://www.vyshnavt.com/success",
+                    "cancel_url": "http://www.vyshnavt.com/cancel"
                 },
                 "transactions": [
                     {
@@ -523,7 +521,7 @@ module.exports = {
                         product: 1,
                         status: 1,
                         coupon: 1,
-                        date: 1,
+                        date: 1, 
                         payment: 1,
                         deliveryDetails: 1,
                         address: 1,

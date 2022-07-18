@@ -132,7 +132,6 @@ module.exports = {
 
     editproduct: (checkname, productid) => {
         return new Promise((resolve, reject) => {
-
             if (checkname == "comming") {
                 db.get().collection(constants.COMMINGSOON).findOne({_id: objectid(productid)}).then((data) => {
                     resolve(data)
@@ -806,7 +805,7 @@ module.exports = {
                     }
                 }, {
                     $match: {
-                        year: year
+                        year: year,"status":{$nin:['cancelled','pending']}
                     }
                 }, {
                     $project: {
@@ -824,8 +823,31 @@ module.exports = {
                         }
                     }
                 }
-            ]).sort({_id: 1}).toArray()
+            ]).sort({_id:1}).toArray()
             resolve(monthreport)
+        })
+    },
+
+    getDailyReport: () => {
+        return new Promise(async (resolve, reject) => {
+            let dailysale = await db.get().collection(constants.ORDER).aggregate([
+               {
+                    $match: {
+                        "status":{$nin:['Cancelled','pending']}
+                    }
+                },{
+                    $group: {
+                        _id:{$dateToString:{format:"%Y-%m-%d",date:"$time"}},
+                        total: {
+                            $sum: '$subtotal'
+                        },
+                        count:{$sum:1}
+                    }
+                }
+            ]).sort({_id:-1}).toArray()
+            console.log(dailysale);
+            console.log("mmkmkmk");
+            resolve(dailysale)
         })
     }
 

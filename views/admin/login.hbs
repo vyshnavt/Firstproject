@@ -48,7 +48,6 @@
   </div>
 </body>
 
-</html>
 <script>
   function namevalidate() {
     const Name = document.getElementById("name").value
@@ -70,10 +69,6 @@
     const Passworderror = document.getElementById("passworderror")
     if (Password == "") {
       Passworderror.innerHTML = "This field must be required!"
-      return false
-    }
-    if (Password.length <= 5) {
-      Passworderror.innerHTML = "Must be 5 charactertics!"
       return false
     }
     Passworderror.innerHTML = ""
